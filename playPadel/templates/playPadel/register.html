@@ -1,0 +1,19 @@
+{% extends "PlayPadel/base.html" %}
+{% load static %}
+
+{% block title %} PlayPadel - Registrati {% endblock %}
+
+<link rel="stylesheet" href="{% static 'css/registrati.css' %}">
+
+{% block content %}
+
+        <div class="registrati-container">
+            <h2>Registrati</h2>
+            <p>Seleziona il tipo di account che vuoi creare</p>
+            <div class="tipo-buttons">
+                <a href="{% url 'student_signup' %}" class="btn btn-cliente btn-lg" role="button">Sono un cliente</a>
+                <a href="{% url 'teacher_signup' %}" class="btn btn-gestore btn-lg" role="button">Sono un gestore</a>
+            </div>
+        </div>
+
+{% endblock %}

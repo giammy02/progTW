@@ -1,0 +1,11 @@
+{% extends "playPadel/base.html" %}
+
+   {% block title %} PlayPadel - Impianti {% endblock %}
+
+{% block content %}
+
+    {% for impianto in object_list %}
+        {{ impianto.nome }} <br>
+    {% endfor %}
+
+{% endblock %}

@@ -9,11 +9,7 @@ from ..models import Gestore
 class GestoreSignUpView(CreateView):
     model = Gestore
     form_class = GestoreSignUpForm
-    template_name = 'playPadel/register_form.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'gestore'
-        return super().get_context_data(**kwargs)
+    template_name = 'playPadel/signup_form.html'
 
     def form_valid(self, form):
         user = form.save()

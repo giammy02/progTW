@@ -9,11 +9,7 @@ from ..models import Cliente
 class ClienteSignUpView(CreateView):
     model = Cliente
     form_class = ClienteSignUpForm
-    template_name = 'playPadel/register_form.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'cliente'
-        return super().get_context_data(**kwargs)
+    template_name = 'playPadel/signup_form.html'
 
     def form_valid(self, form):
         user = form.save()

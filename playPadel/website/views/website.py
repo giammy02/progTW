@@ -1,24 +1,26 @@
 from django.shortcuts import render, redirect
-from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
 from ..models import Impianto
 
 
 class SignUpView(TemplateView):
-    template_name = 'PlayPadel/register.html'
+    template_name = 'PlayPadel/signup.html'
 
 
-def home(request):
+def homepage(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
-            return redirect('gestore:quiz_change_list')  # PAGINA MODIFICA IMPIANTI
+            pass
+            # return redirect('website:impianti')  # PAGINA MODIFICA IMPIANTI
         else:
-            return redirect('cliente:quiz_list')  # PAGINA LISTA IMPIANTI
+            pass
+            # return redirect('website:impianti')  # PAGINA LISTA IMPIANTI
     return render(request, 'website/homepage.html')
 
 
-class ImpiantiDetails(DetailView):
+class ImpiantiList(ListView):
     model = Impianto
     template_name = 'website/impianti.html'
 

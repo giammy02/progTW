@@ -1,12 +1,14 @@
 {% extends "playPadel/base.html" %}
 
+{% load static %}
+
 {% block title %} PlayPadel - Home {% endblock %}
 
 {% block content %}
 
-    <section class="hero bg-primary text-white text-center py-5">
+    <section class="hero bg-primary text-light text-center py-5" style="background-image: url('{% static '/img/homepage_photo.png' %}'); opacity: 0.9; background-position: left;">
         <div class="container">
-            <h1 class="display-4">Benvenuti su PlayPadel!</h1>
+            <h1 class="display-4">Benvenuti su <strong>PlayPadel</strong></h1>
             <p class="lead">Prenota facilmente il tuo campo da padel nei migliori impianti della tua città</p>
             <a href="{% url 'website:prenota' %}" class="btn btn-light btn-lg">Prenota Ora</a>
         </div>
@@ -34,6 +36,7 @@
     <section class="testimonials bg-light py-5">
         <div class="container">
             <h2 class="text-center mb-5">Cosa dicono di noi</h2>
+            <i class="bi bi-star-fill"></i>
             <div class="row">
                 <div class="col-md-4">
                     <div class="testimonial p-4 bg-white rounded shadow-sm">

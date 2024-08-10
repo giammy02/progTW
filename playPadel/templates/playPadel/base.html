@@ -10,67 +10,50 @@
         <link rel="stylesheet" type="text/css" href="{% static '/css/base.css' %}">
     </head>
     <body>
-        <header>
-            <div class="left-section">
-                <div class="logo">PlayPadel</div>
-                <div class="separator"></div>
-                <nav class="menu">
-                    <ul>
-                        <li><a href="{% url 'website:homepage' %}">Home</a></li> <!-- MODIFICA -->
-                        <li><a href="{% url 'website:impianti' %}">Impianti</a></li>
-                        <li><a href="{% url 'website:prenota' %}">Prenota</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="auth-buttons">
-                {% if user.is_authenticated %}
-                    <p class="pt-3">Accesso effettuato come <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}">Esci</a>.</p>
-                {% else %}
-                    <a href="{% url 'login' %}" class="login-btn" role="button">Accedi</a>
-                    <a href="{% url 'signup' %}" class="signup-btn" role="button">Iscriviti</a>
-                {% endif %}
+
+        <header class="bg-dark py-3 border-bottom border-secondary">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <h1 class="h3 mb-0 me-4">PlayPadel</h1>
+                    <span class="border-end mx-3" style="height: 24px;"></span>
+                    <nav>
+                        <ul class="list-unstyled d-flex mb-0">
+                            <li class="me-4"><a href="{% url 'website:homepage' %}" class="text-light text-decoration-none">Home</a></li>
+                            <li><a href="{% url 'website:impianti' %}" class="text-light m-4 text-decoration-none">Impianti</a></li>
+                            <li><a href="{% url 'website:prenota' %}" class="text-light text-decoration-none">Prenota</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div>
+                    {% if user.is_authenticated %}
+                        <p class="pt-3 mr-2">Accesso effettuato come <strong>{{ user.username }}</strong> <a href="{% url 'logout' %}" class="ml-2">Esci</a></p>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-light mr-2" role="button">Accedi</a>
+                        <a href="{% url 'registrati' %}" class="btn btn-primary" role="button">Iscriviti</a>
+                    {% endif %}
+                </div>
             </div>
         </header>
 
         {% block content %}
         {% endblock %}
 
-        <footer>
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3>PlayPadel</h3>
-                    <p>Il miglior sito per prenotare i campi da padel.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Informazioni</h3>
-                    <ul>
-                        <li><a href="#">Chi siamo</a></li>
-                        <li><a href="#">Contatti</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Termini di Servizio</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Seguici</h3>
-                    <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Instagram</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Supporto</h3>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Assistenza</a></li>
-                        <li><a href="#">Feedback</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2024 PlayPadel. Tutti i diritti riservati.
+        <footer class="bg-dark py-4 border-top border-secondary">
+            <div class="container text-center">
+                <p class="mb-0">
+                    <a href="#" class="text-light text-decoration-none">Chi siamo</a>
+                    |
+                    <a href="#" class="text-light text-decoration-none">Contatti</a>
+                    |
+                    <a href="#" class="text-light text-decoration-none">Privacy Policy</a>
+                    |
+                    <a href="#" class="text-light text-decoration-none">Termini di Servizio</a>
+                </p>
+                <p class="mb-0">© 2024 PlayPadel. Tutti i diritti riservati.</p>
             </div>
         </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
 </html>

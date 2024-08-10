@@ -5,8 +5,12 @@ from django.views.generic import TemplateView
 from ..models import Impianto
 
 
+class SignInView(TemplateView):
+    template_name = 'playPadel/login.html'
+
+
 class SignUpView(TemplateView):
-    template_name = 'PlayPadel/signup.html'
+    template_name = 'playPadel/signup.html'
 
 
 def homepage(request):

@@ -21,6 +21,7 @@ from website.views import website, cliente, gestore
 urlpatterns = [
     path('', include('website.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', website.SignInView.as_view(), name='login'),
     path('accounts/signup/', website.SignUpView.as_view(), name='registrati'),
     path('accounts/signup/cliente/', cliente.ClienteSignUpView.as_view(), name='registra_cliente'),
     path('accounts/signup/gestore/', gestore.GestoreSignUpView.as_view(), name='registra_gestore'),

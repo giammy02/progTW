@@ -4,40 +4,64 @@
 
 {% block content %}
 
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Benvenuti su PlayPadel</h2>
-            <p>Il miglior sito per prenotare i campi da padel.</p>
-            <a href="{% url 'website:prenota' %}" class="cta-button">Prenota Ora</a>
+    <section class="hero bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Benvenuti su PlayPadel!</h1>
+            <p class="lead">Prenota facilmente il tuo campo da padel nei migliori impianti della tua città</p>
+            <a href="{% url 'website:prenota' %}" class="btn btn-light btn-lg">Prenota Ora</a>
         </div>
     </section>
 
-        <section class="features">
-            <div class="feature">
-                <h3>Facile da Usare</h3>
-                <p>Prenota il tuo campo in pochi clic.</p>
+    <section class="features py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h3>Facile e Veloce</h3>
+                    <p>Trova e prenota il campo da padel perfetto con pochi clic.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h3>Migliori Impianti</h3>
+                    <p>Accedi a una vasta gamma di impianti di alta qualità.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h3>Offerte Esclusive</h3>
+                    <p>Approfitta delle offerte speciali riservate ai nostri iscritti.</p>
+                </div>
             </div>
-            <div class="feature">
-                <h3>Campi di Qualità</h3>
-                <p>Scegli tra i migliori campi da padel della tua zona.</p>
-            </div>
-            <div class="feature">
-                <h3>Supporto 24/7</h3>
-                <p>Siamo sempre qui per aiutarti.</p>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="testimonials">
-            <h2>Cosa dicono i nostri utenti</h2>
-            <div class="testimonial">
-                <p>"PlayPadel ha reso la prenotazione dei campi da padel così facile!" - Marco</p>
+    <section class="testimonials bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Cosa dicono di noi</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial p-4 bg-white rounded shadow-sm">
+                        <p>"PlayPadel mi ha permesso di trovare il campo perfetto in pochi minuti!"</p>
+                        <footer class="blockquote-footer bg-transparent text-dark text-right">Giulia Rossi</footer>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial p-4 bg-white rounded shadow-sm">
+                        <p>"Servizio eccellente, facile da usare e con tante opzioni!"</p>
+                        <footer class="blockquote-footer bg-transparent text-dark text-right">Marco Bianchi</footer>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial p-4 bg-white rounded shadow-sm">
+                        <p>"Finalmente un sito che rende semplice prenotare un campo da padel!"</p>
+                        <footer class="blockquote-footer bg-transparent text-dark text-right">Luca Verdi</footer>
+                    </div>
+                </div>
             </div>
-            <div class="testimonial">
-                <p>"Ottima esperienza, campi fantastici e servizio eccellente." - Laura</p>
-            </div>
-            <div class="testimonial">
-                <p>"Consiglio vivamente PlayPadel a tutti gli appassionati di padel." - Giovanni</p>
-            </div>
-        </section>
+        </div>
+    </section>
+
+    <section class="cta bg-primary text-white text-center py-5">
+        <div class="container">
+            <h2>Iscriviti e inizia a giocare oggi!</h2>
+            <a href="{% url 'registrati' %}" class="btn btn-light btn-lg mt-3">Iscriviti Ora</a>
+        </div>
+    </section>
 
 {% endblock %}

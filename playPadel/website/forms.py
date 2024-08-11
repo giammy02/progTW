@@ -21,7 +21,7 @@ class GestoreSignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_gestore = True
+        user.is_staff = True
         if commit:
             user.save()
         return user

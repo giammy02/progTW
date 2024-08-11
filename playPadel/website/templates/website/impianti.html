@@ -1,9 +1,38 @@
 {% extends "playPadel/base.html" %}
 
-   {% block title %} PlayPadel - Impianti {% endblock %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/custombtsp.css' %}">
+
+{% block title %} PlayPadel - Impianti {% endblock %}
 
 {% block content %}
 
-    Impianti
+    <section class="section py-1" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <h2 class="pb-4">Lista di Impianti disponibili</h2>
+            <div class="card-deck justify-content-center">
+                {% for impianto in object_list %}
+                    <div class="card my-3" style="min-width: 21rem; max-width: 21rem;">
+                        <img class="card-img-top" src="{% static 'img/profile_pics' %}/{{ impianto.foto }}" alt="" style=" width:50%;opacity: 0.9; background-repeat: no-repeat">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ impianto.nome }}</h5>
+                            <p class="card-text">{{ impianto.posizione }}</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">{{ impianto.numero_campi }} campi</li>
+                                <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="#" class="card-link">Vai all'impianto</a>
+                                <a href="#" class="card-link">Prenota campo</a> <!-- AGGIUNGERE LINK CON ANCHOR SEZIONE CAMPI DELL'IMPIANTO -->
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h5 class="py-2">Non c'è ancora nulla qui...</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

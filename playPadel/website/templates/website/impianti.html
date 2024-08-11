@@ -2,8 +2,6 @@
 
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/custombtsp.css' %}">
-
 {% block title %} PlayPadel - Impianti {% endblock %}
 
 {% block content %}
@@ -14,7 +12,7 @@
             <div class="card-deck justify-content-center">
                 {% for impianto in object_list %}
                     <div class="card my-3" style="min-width: 21rem; max-width: 21rem;">
-                        <img class="card-img-top" src="{% static 'img/profile_pics' %}/{{ impianto.foto }}" alt="" style=" width:50%;opacity: 0.9; background-repeat: no-repeat">
+                        <img class="card-img-top" src="{% static 'img/profile_pics' %}/{{ impianto.foto }}" alt="" style="height: 50%; opacity: 0.9;  object-fit: cover; object-position: center">
                         <div class="card-body">
                             <h5 class="card-title">{{ impianto.nome }}</h5>
                             <p class="card-text">{{ impianto.posizione }}</p>
@@ -23,13 +21,13 @@
                                 <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
                             </ul>
                             <div class="card-body">
-                                <a href="#" class="card-link">Vai all'impianto</a>
-                                <a href="#" class="card-link">Prenota campo</a> <!-- AGGIUNGERE LINK CON ANCHOR SEZIONE CAMPI DELL'IMPIANTO -->
+                                <a href="#" class="card-link btn btn-outline-primary " role="button">Dettagli</a>
+                                <a href="#" class="card-link btn btn-outline-success" role="button">Prenota campo</a> <!-- AGGIUNGERE LINK CON ANCHOR SEZIONE CAMPI DELL'IMPIANTO -->
                             </div>
                         </div>
                     </div>
                 {% empty %}
-                    <h5 class="py-2">Non c'è ancora nulla qui...</h5>
+                    <h5 class="my-2">Non c'è ancora nulla qui...</h5>
                 {% endfor %}
             </div>
         </div>

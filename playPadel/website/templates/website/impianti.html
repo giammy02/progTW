@@ -21,7 +21,7 @@
                                 <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
                             </ul>
                             <div class="card-body">
-                                <a href="#" class="card-link btn btn-outline-primary " role="button">Dettagli</a>
+                                <a href="{% url 'website:impianto_detail' impianto.nome %}" class="card-link btn btn-outline-primary " role="button">Dettagli</a>
                                 <a href="#" class="card-link btn btn-outline-success" role="button">Prenota campo</a> <!-- AGGIUNGERE LINK CON ANCHOR SEZIONE CAMPI DELL'IMPIANTO -->
                             </div>
                         </div>

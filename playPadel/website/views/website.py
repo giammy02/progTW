@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 
 from ..models import Impianto
 
@@ -27,6 +27,11 @@ def homepage(request):
 class ImpiantiList(ListView):
     model = Impianto
     template_name = 'website/impianti.html'
+
+
+class ImpiantoDetail(DetailView):
+    model = Impianto
+    template_name = 'website/impianto_detail.html'
 
 
 def prenota(request):

@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import AbstractUser
 
 
@@ -24,6 +25,7 @@ class Gestore(models.Model):
 
 class Impianto(models.Model):
     nome = models.CharField(max_length=100, blank=False, null=False)
+    slug = models.SlugField(null=False, unique=True, default=slugify(nome))
     foto = models.ImageField(upload_to='media/profile_pics', blank=True, null=True)
     numero_campi = models.IntegerField(blank=False, null=False)
     posizione = models.CharField(max_length=255, blank=False, null=False)
@@ -31,6 +33,11 @@ class Impianto(models.Model):
     prezzi = models.CharField(max_length=100)
     contatti = models.CharField(max_length=100)
     caratteristiche = models.CharField(max_length=255, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nome)
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Impianti'

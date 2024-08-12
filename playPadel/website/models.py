@@ -24,6 +24,7 @@ class Gestore(models.Model):
 
 
 class Impianto(models.Model):
+    gestore = models.ForeignKey(Gestore, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, blank=False, null=False)
     slug = models.SlugField(null=False, unique=True, default=slugify(nome))
     foto = models.ImageField(upload_to='media/profile_pics', blank=True, null=True)
@@ -33,11 +34,6 @@ class Impianto(models.Model):
     prezzi = models.CharField(max_length=100)
     contatti = models.CharField(max_length=100)
     caratteristiche = models.CharField(max_length=255, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.nome)
-        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Impianti'

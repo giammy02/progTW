@@ -6,6 +6,13 @@
 
 {% block content %}
 
-    Impianto {{ object.nome }}
+    <section class="section py-1" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <h2 class="pb-4"><strong>{{ object.nome }}</strong></h2>
+            <img src="{% static 'img/profile_pics' %}/{{ object.foto }}" class="img-fluid" alt="Responsive image">
+            <!-- AGGIUNGERE INFO SU GESTORE -->
+            {{ object.gestore.user.first_name }}
+        </div>
+    </section>
 
 {% endblock %}

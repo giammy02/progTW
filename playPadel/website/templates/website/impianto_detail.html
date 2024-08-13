@@ -12,6 +12,10 @@
             <img src="{% static 'img/profile_pics' %}/{{ object.foto }}" class="img-fluid" alt="Responsive image">
             <!-- AGGIUNGERE INFO SU GESTORE -->
             {{ object.gestore.user.first_name }}
+            <br>
+            {% for i in campo %}
+            {{ i.tipologia }}
+            {% endfor %}
         </div>
     </section>
 

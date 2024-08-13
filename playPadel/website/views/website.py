@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
 
-from ..models import Impianto
+from ..models import *
 
 
 class SignInView(TemplateView):
@@ -32,6 +32,11 @@ class ImpiantiList(ListView):
 class ImpiantoDetail(DetailView):
     model = Impianto
     template_name = 'website/impianto_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campo'] = Campo.objects.filter(impianto_id=self.get_object().pk)
+        return context
 
 
 def prenota(request):

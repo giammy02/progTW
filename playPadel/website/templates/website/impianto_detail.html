@@ -2,21 +2,88 @@
 
 {% load static %}
 
+<link rel="stylesheet" href="{% static '/css/impianto_detail_style.css' %}">
+
 {% block title %} PlayPadel - {{ object.nome }} {% endblock %}
 
 {% block content %}
 
     <section class="section py-1" style="min-height: 83vh;">
-        <div class="container bg-white text-black text text-center py-5">
-            <h2 class="pb-4"><strong>{{ object.nome }}</strong></h2>
-            <img src="{% static 'img/profile_pics' %}/{{ object.foto }}" class="img-fluid" alt="Responsive image">
-            <!-- AGGIUNGERE INFO SU GESTORE -->
-            {{ object.gestore.user.first_name }}
-            <br>
-            {% for i in campo %}
-            {{ i.tipologia }}
-            {% endfor %}
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col text-center">
+                    <h2 class="display-4">{{ object.nome }}</h2>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <strong>Posizione:</strong> {{ object.posizione }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-clock-fill"></i>
+                            <strong>Orari di apertura:</strong> {{ object.orari }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-cash"></i>
+                            <strong>Prezzi:</strong> A partire da {{ object.prezzi }}€
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-telephone-fill"></i>
+                            <strong>Contatti:</strong> {{ object.contatti }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-info-circle-fill"></i>
+                            <strong>Servizi offerti:</strong> {{ object.caratteristiche }}
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-person-badge-fill"></i>
+                                    <h5 class="ml-3 mt-2">Informazioni sul gestore dell'impianto</h5>
+                                </div>
+                                <div class="d-flex align-items-center mt-3">
+                                    <img src="{% static 'img/profile_pics' %}/{{ object.gestore.foto }}" class="rounded-circle" alt="Foto del gestore">
+                                    <p class="ml-3 mb-0"><strong>{{ object.gestore.user.first_name }} {{ object.gestore.user.last_name }}</strong></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="{% static 'img/profile_pics' %}/{{ object.foto }}" class="img-fluid rounded" alt="Foto dell'impianto">
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col text-center">
+                    <h2>Lista campi</h2>
+                </div>
+            </div>
+            <div class="accordion" id="accordion">
+                {% for i in campo %}
+                    <div class="card bg-transparent my-2" style="border: 1px solid #ddd;">
+                        <div class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
+                            <span class="title" style="font-size: 17px; color: #000">Campo {{ forloop.counter }} - {{ i.tipologia }}</span>
+                            <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-chevron-down rotate"></i></span>
+                        </div>
+                        <div id="collapse{{ forloop.counter }}" class="collapse hidden" data-parent="#accordion">
+                            <div class="card-body" style="border-top: 1px solid #ddd;">
+                                Orari...
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </section>
 
 {% endblock %}
+
+<script>
+    $(".rotate").click(function(){
+        $(this).toggleClass("down");
+    });
+</script>

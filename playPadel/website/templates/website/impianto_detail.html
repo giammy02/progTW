@@ -2,7 +2,9 @@
 
 {% load static %}
 
+{% block head %}
 <link rel="stylesheet" href="{% static '/css/impianto_detail_style.css' %}">
+{% endblock %}
 
 {% block title %} PlayPadel - {{ object.nome }} {% endblock %}
 
@@ -10,10 +12,16 @@
 
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container mt-5">
-            <div class="row">
-                <div class="col text-center">
-                    <h2 class="display-4">{{ object.nome }}</h2>
+            <div class="row align-items-center">
+                <div class="col-md-2 text-left">
+                    <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark">
+                        Torna alla lista impianti
+                    </a>
                 </div>
+                <div class="col-md-8 text-center">
+                    <h1 class="display-4 mb-0">Impianto {{ object.nome }}</h1>
+                </div>
+                <div class="col-md-2"></div>
             </div>
             <div class="row mt-4">
                 <div class="col-md-6">
@@ -45,16 +53,15 @@
                                     <h5 class="ml-3 mt-2">Informazioni sul gestore dell'impianto</h5>
                                 </div>
                                 <div class="d-flex align-items-center mt-3">
-                                    <img src="{% static 'img/profile_pics' %}/{{ object.gestore.foto }}" class="rounded-circle" alt="Foto del gestore">
-                                    <p class="ml-3 mb-0"><strong>{{ object.gestore.user.first_name }} {{ object.gestore.user.last_name }}</strong></p>
+                                    <img src="{% static 'img/profile_pics' %}/{{ object.gestore.foto }}" class="rounded-circle ml-3 border border-info" alt="Foto del gestore" style="width: 100px; height: 100px;">
+                                    <p class="ml-5 mb-0"><strong>{{ object.gestore.user.first_name }} {{ object.gestore.user.last_name }}</strong></p>
                                 </div>
                             </div>
                         </li>
                     </ul>
-
                 </div>
                 <div class="col-md-6 text-center">
-                    <img src="{% static 'img/profile_pics' %}/{{ object.foto }}" class="img-fluid rounded" alt="Foto dell'impianto">
+                    <img src="{% static 'img/media' %}/{{ object.foto }}" class="img-fluid rounded" alt="Foto dell'impianto">
                 </div>
             </div>
             <div class="row mt-4">
@@ -62,13 +69,13 @@
                     <h2>Lista campi</h2>
                 </div>
             </div>
-            <div class="accordion" id="accordion">
+            <div id="accordion">
                 {% for i in campo %}
                     <div class="card bg-transparent my-2" style="border: 1px solid #ddd;">
-                        <div class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
+                        <a class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
                             <span class="title" style="font-size: 17px; color: #000">Campo {{ forloop.counter }} - {{ i.tipologia }}</span>
-                            <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-chevron-down rotate"></i></span>
-                        </div>
+                            <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-chevron-up"></i></span>
+                        </a>
                         <div id="collapse{{ forloop.counter }}" class="collapse hidden" data-parent="#accordion">
                             <div class="card-body" style="border-top: 1px solid #ddd;">
                                 Orari...
@@ -81,9 +88,3 @@
     </section>
 
 {% endblock %}
-
-<script>
-    $(".rotate").click(function(){
-        $(this).toggleClass("down");
-    });
-</script>

@@ -27,7 +27,7 @@ class Impianto(models.Model):
     gestore = models.ForeignKey(Gestore, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, blank=False, null=False)
     slug = models.SlugField(null=False, unique=True, default=slugify(nome))
-    foto = models.ImageField(upload_to='media/profile_pics', blank=True, null=True)
+    foto = models.ImageField(upload_to='media', blank=True, null=True)
     numero_campi = models.IntegerField(blank=False, null=False)
     posizione = models.CharField(max_length=255, blank=False, null=False)
     orari = models.CharField(max_length=255)

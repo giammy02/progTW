@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block head %}
+<link rel="stylesheet" href="{% static '/css/impianto_style.css' %}">
+{% endblock %}
+
 {% block title %} PlayPadel - Impianti {% endblock %}
 
 {% block content %}
@@ -12,7 +16,7 @@
             <div class="card-deck justify-content-center">
                 {% for impianto in object_list %}
                     <div class="card my-3" style="min-width: 21rem; max-width: 21rem;">
-                        <img class="card-img-top" src="{% static 'img/profile_pics' %}/{{ impianto.foto }}" alt="Foto impianto" style="max-height: 15rem; min-height:15rem; opacity: 0.9;  object-fit: cover; object-position: center">
+                        <img class="card-img-top" src="{% static 'img/media' %}/{{ impianto.foto }}" alt="Foto impianto" style="max-height: 15rem; min-height:15rem; opacity: 0.9;  object-fit: cover; object-position: center">
                         <div class="card-body">
                             <h5 class="card-title">{{ impianto.nome }}</h5>
                             <p class="card-text">{{ impianto.posizione }}</p>

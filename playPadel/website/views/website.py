@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
@@ -35,9 +36,24 @@ class ImpiantoDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['campo'] = Campo.objects.filter(impianto_id=self.get_object().pk)
+
+        orario = self.object.orari
+        orario_inizio, orario_fine = orario.split(" - ")
+        formato_orario = "%H:%M"
+        inizio = datetime.strptime(orario_inizio, formato_orario)
+        fine = datetime.strptime(orario_fine, formato_orario)
+        differenza_orario = int((fine-inizio).total_seconds() / 3600)
+        context['inizio'] = orario_inizio
+        context['differenza_orario'] = range(0, differenza_orario)
+
         return context
 
 
 def prenota(request):
     return render(request, 'website/prenota.html')
+
+
+def conferma_prenotazione(request):
+    return render(request, 'website/conferma_prenotazione.html')

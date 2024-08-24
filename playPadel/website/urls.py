@@ -8,5 +8,6 @@ urlpatterns = [
     path('impianti/', website.ImpiantiList.as_view(), name='impianti'),
     path('impianti/<slug:slug>/', website.ImpiantoDetail.as_view(), name='impianto_detail'),
     # path('impianti/<slug:slug>/prenota/', website.prenota, name='prenotazione'),
-    path('prenota/', website.prenota, name='prenota')
+    path('prenota/', website.prenota, name='prenota'),
+    path('conferma_prenotazione/', website.conferma_prenotazione, name='conferma_prenotazione'),
 ]

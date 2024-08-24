@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
@@ -43,10 +43,21 @@ class ImpiantoDetail(DetailView):
         orario_inizio, orario_fine = orario.split(" - ")
         formato_orario = "%H:%M"
         inizio = datetime.strptime(orario_inizio, formato_orario)
-        fine = datetime.strptime(orario_fine, formato_orario)
+        if orario_fine == "24:00":
+            orario_fine = "00:00"
+            fine = datetime.strptime(orario_fine, formato_orario) + timedelta(days=1)
+        else:
+            fine = datetime.strptime(orario_fine, formato_orario)
         differenza_orario = int((fine-inizio).total_seconds() / 3600)
         context['inizio'] = orario_inizio
         context['differenza_orario'] = range(0, differenza_orario)
+
+        ore = []
+        ora_corrente = inizio
+        while ora_corrente < fine:
+            ore.append(ora_corrente.strftime('%H:%M'))
+            ora_corrente += timedelta(hours=1)
+        context['ore'] = ore
 
         return context
 

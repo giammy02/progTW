@@ -4,7 +4,15 @@
 
 {% block content %}
 
-    Prenotazione Confermata!
-    Torna alla lista impianti
+    <section class="section py-4" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <h2>Prenotazione Confermata!</h2>
+            <p>Preparati a giocare presso ...</p>
+            <div class="tipo-buttons">
+                <a href="{% url 'website:homepage' %}" class="btn btn-outline-dark mr-2" role="button">Torna alla homepage</a>
+                <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark ml-2" role="button">Torna alla lista impianti</a>
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

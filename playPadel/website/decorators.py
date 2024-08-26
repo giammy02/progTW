@@ -2,9 +2,9 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
 
 
-def student_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
+def cliente_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='playPadel:login'):
     '''
-    Decorator for views that checks that the logged-in user is a student,
+    Decorator for views that checks that the logged-in user is a client,
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(
@@ -17,9 +17,9 @@ def student_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
     return actual_decorator
 
 
-def teacher_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
+def gestore_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='playPadel:login'):
     '''
-    Decorator for views that checks that the logged-in user is a teacher,
+    Decorator for views that checks that the logged-in user is a gestore,
     redirects to the log-in page if necessary.
     '''
     actual_decorator = user_passes_test(

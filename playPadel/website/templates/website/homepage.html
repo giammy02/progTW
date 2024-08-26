@@ -10,7 +10,7 @@
         <div class="container">
             <h1 class="display-4 text-white"><strong>Benvenuti su PlayPadel</strong></h1>
             <p class="lead"><mark>Prenota facilmente il tuo campo da padel nei migliori impianti della tua città</mark></p>
-            <a href="{% url 'website:prenota' %}" class="btn btn-light btn-lg">Prenota Ora</a>
+            <a href="{% url 'website:impianti' %}" class="btn btn-light btn-lg">Visualizza impianti</a>
         </div>
     </section>
 
@@ -18,15 +18,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 text-center">
-                    <h3>Facile e Veloce</h3>
+                    <h3>Facile e veloce</h3>
                     <p>Trova e prenota il campo da padel perfetto con pochi clic.</p>
                 </div>
                 <div class="col-md-4 text-center">
-                    <h3>Migliori Impianti</h3>
+                    <h3>Migliori impianti</h3>
                     <p>Accedi a una vasta gamma di impianti di alta qualità.</p>
                 </div>
                 <div class="col-md-4 text-center">
-                    <h3>Offerte Esclusive</h3>
+                    <h3>Offerte esclusive</h3>
                     <p>Approfitta delle offerte speciali riservate ai nostri iscritti.</p>
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
     <section class="testimonials bg-light py-5">
         <div class="container">
-            <h2 class="text-center mb-5">Cosa Dicono di Noi</h2>
+            <h2 class="text-center mb-5">Cosa dicono di noi</h2>
             <div class="row">
                 <div class="col-md-4">
                     <div class="testimonial p-4 bg-white rounded shadow-sm">
@@ -62,7 +62,8 @@
     <section class="cta bg-primary text-white text-center py-xl-5">
         <div class="container">
             <h2>Iscriviti e inizia a giocare oggi!</h2>
-            <a href="{% url 'registrati' %}" class="btn btn-light btn-lg mt-3">Registrati Ora</a>
+            <a href="{% url 'registrati' %}" class="btn btn-light btn-lg mt-3 mr-2">Registrati ora</a>
+            <a href="{% url 'website:prenota' %}" class="btn btn-outline-light btn-lg mt-3 ml-2">Prenota ora</a>
         </div>
     </section>
 

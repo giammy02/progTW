@@ -2,10 +2,6 @@
 
 {% load static %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static '/css/impianto_style.css' %}">
-{% endblock %}
-
 {% block title %} PlayPadel - Impianti {% endblock %}
 
 {% block content %}
@@ -25,8 +21,7 @@
                                 <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
                             </ul>
                             <div class="card-body">
-                                <a href="{% url 'website:impianto_detail' impianto.slug %}" class="card-link btn btn-outline-primary " role="button">Dettagli</a>
-                                <a href="#" class="card-link btn btn-outline-success" role="button">Prenota campo</a>
+                                <a href="{% url 'website:impianto_detail' slug=impianto.slug %}" class="card-link btn btn-outline-primary w-100" role="button">Dettagli</a>
                             </div>
                         </div>
                     </div>

@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website'
+    'website',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/img/")
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -132,11 +135,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom django auth
 
 AUTH_USER_MODEL = "website.Users"
-
-LOGIN_URL = 'login'
-
-LOGOUT_URL = 'logout'
-
-LOGIN_REDIRECT_URL = 'website:homepage'
-
-LOGOUT_REDIRECT_URL = 'website:homepage'

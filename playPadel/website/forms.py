@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
@@ -25,3 +27,16 @@ class GestoreSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class PrenotazioneForm(forms.Form):
+    model = Prenotazione
+    fields = ['impianto', 'campo', 'data', 'ora_inizio', 'ora_fine']
+    data_prenotazione = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+        }),
+        label="Data prenotazione",
+        initial=datetime.now().date()
+    )

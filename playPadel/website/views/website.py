@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
 
 from ..models import *
+from ..forms import PrenotazioneForm
 
 
 class SignInView(TemplateView):
@@ -37,8 +38,16 @@ class ImpiantoDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Collegamento tra tabella campi e impianto
         context['campo'] = Campo.objects.filter(impianto_id=self.get_object().pk)
 
+        # Collegamento con tabella news dell'impianto
+        context['news'] = News.objects.filter(impianto_id=self.get_object().pk)
+
+        # DatePicker
+        context['form'] = PrenotazioneForm()
+
+        # Formattazione campo orari
         orario = self.object.orari
         orario_inizio, orario_fine = orario.split(" - ")
         formato_orario = "%H:%M"
@@ -51,7 +60,6 @@ class ImpiantoDetail(DetailView):
         differenza_orario = int((fine-inizio).total_seconds() / 3600)
         context['inizio'] = orario_inizio
         context['differenza_orario'] = range(0, differenza_orario)
-
         ore = []
         ora_corrente = inizio
         while ora_corrente < fine:
@@ -60,6 +68,14 @@ class ImpiantoDetail(DetailView):
         context['ore'] = ore
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = PrenotazioneForm(request.POST)
+        if form.is_valid():
+            # Process the form data (e.g., save the booking)
+            return redirect('website:conferma_prenotazione')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 def prenota(request):

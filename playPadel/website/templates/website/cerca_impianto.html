@@ -1,11 +1,13 @@
 {% extends "playPadel/base.html" %}
 
+{% load static %}
+
 {% block title %} PlayPadel - Prenota {% endblock %}
 
 {% block content %}
 
     <section class="section py-1" style="min-height: 83vh;">
-        <div class="container mt-5">
+        <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
                 <div class="col-md-2 text-left">
                     <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla lista degli impianti">
@@ -18,14 +20,29 @@
                 <div class="col-md-2"></div>
             </div>
             {% include 'website/search_template.html' %}
-            <hr class="hr" />
-            {% if object_list %}
-            {% else %}
-                <div class="row d-flex flex-column align-items-center text-center mt-5">
-                    <h5 class="text-danger">Nessun impianto trovato...</h5>
-                    <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark mt-2 w-25" role="button">Torna alla lista impianti</a>
-                </div>
-            {% endif %}
+            <div class="card-deck justify-content-center">
+                {% for impianto in object_list %}
+                    <div class="card my-3" style="min-width: 21rem; max-width: 21rem;">
+                        <img class="card-img-top" src="{% static 'img/media' %}/{{ impianto.foto }}" alt="Foto impianto" style="max-height: 15rem; min-height:15rem; opacity: 0.9;  object-fit: cover; object-position: center">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ impianto.nome }}</h5>
+                            <p class="card-text">{{ impianto.posizione }}</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">{{ impianto.numero_campi }} campi</li>
+                                <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="{% url 'website:impianto_detail' slug=impianto.slug %}" class="card-link btn btn-outline-primary w-100" role="button">Dettagli</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="row d-flex flex-column align-items-center text-center mt-5">
+                        <h5 class="text-danger">Nessun impianto trovato...</h5>
+                        <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark mt-2 w-25" role="button">Torna alla lista impianti</a>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </section>
 

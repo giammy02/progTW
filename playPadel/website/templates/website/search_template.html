@@ -9,16 +9,90 @@
             <input class='form-control ml-2 w-50' id="cercaPosizioneImpianto" name="q2" type="search" aria-label="Cerca" placeholder="Via/Città" required>
         </div>
         <div class="col-md-2 text-right">
-            <button class="btn btn-outline-success my-2 my-sm-0 mr-4" type="submit">Cerca</button>
+            <button class="btn btn-outline-primary mr-4" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false" aria-controls="collapseExample">
+                Aggiungi filtri
+            </button>
         </div>
     </div>
+    <div class="row mt-2 collapse mx-4" id="filterCollapse">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-4 form-inline border-right border-dark mr-2 pb-3">
+                    <label for="rangeNumCampi"><strong>Numero campi</strong></label>
+                    <input type="range" class="form-control-range is-valid" id="rangeNumCampi">
+                    <label for="rangePrezzo" class="mt-3"><strong>Prezzo</strong></label>
+                    <input type="range" class="form-control-range is-valid" id="rangePrezzo">
+                </div>
+                <div class="col-md-7 form-group ml-2 mb-0">
+                    <strong class="float-left">Filtra caratteristiche</strong>
+                    <div class="row ml-3">
+                        <div class="row form-check-inline mt-2 w-100">
+                            <label for="tipoCampi" class="mr-4 mb-0">Tipologia campi:</label>
+                            <div class="custom-control custom-checkbox mr-2">
+                                <input class="custom-control-input" type="checkbox" id="outdoor" checked>
+                                <label class="custom-control-label" for="outdoor">Outdoor</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="indoor">
+                                <label class="custom-control-label" for="indoor">Indoor</label>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <label for="serviziImpianto" class="text-left mb-0">Servizi impianto:</label>
+                        </div>
+                        <div class="row form-check-inline mt-1">
+                            <div class="custom-control custom-checkbox mr-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziNoleggio">
+                                <label class="custom-control-label" for="serviziNoleggio">Noleggio</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziSpogliatoi">
+                                <label class="custom-control-label" for="serviziSpogliatoi">Spogliatoi</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziDocce">
+                                <label class="custom-control-label" for="serviziDocce">Docce</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziBar">
+                                <label class="custom-control-label" for="serviziBar">Bar</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziParcheggio">
+                                <label class="custom-control-label" for="serviziParcheggio">Parcheggio</label>
+                            </div>
+                            <div class="custom-control custom-checkbox ml-2">
+                                <input class="custom-control-input" type="checkbox" id="serviziAltro">
+                                <label class="custom-control-label" for="serviziAltro">Altro</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6 text-left">
+                    <input type="reset" class="btn btn-outline-danger" value="Cancella filtri">
+                </div>
+                <div class="col-md-6 text-right">
+                    <button class="btn btn-primary">
+                        <i class="bi bi-magic"></i> Imposta Filtri
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 mt-2 text-right">
+        <button class="btn btn-success my-2 my-sm-0 mr-2" type="submit">Cerca</button>
+    </div>
 </form>
+<hr class="hr" />
 
 <script>
     // Script per impostare su 'required' solo uno dei due textfield
     document.addEventListener('DOMContentLoaded', function() {
         const inputs = Array.from(
-            document.querySelectorAll('input[name=q], input[name=q2]')
+            document.querySelectorAll('input[name=q], input[name=q2], input[id=rangeNumCampi], input[id=rangePrezzo], input[id=indoor], ' +
+                'input[id=serviziNoleggio], input[id=serviziSpogliatoi], input[id=serviziDocce], input[id=serviziBar], input[id=serviziParcheggio], input[id=serviziAltro]')
       );
 
       const inputListener = e => {
@@ -29,13 +103,5 @@
 
       inputs.forEach(i => i.addEventListener('input', inputListener));
     });
-</script>
 
-<!--
-    <div class="row mt-2">
-        <div class="col-md-6 form-inline mr-2">
-            <label for="rangeNumCampi" class="mt-3"><strong>Numero campi</strong></label>
-            <input type="range" class="form-control-range is-valid" id="rangeNumCampi">
-        </div>
-    </div>
--->
+</script>

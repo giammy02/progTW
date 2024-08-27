@@ -1,0 +1,32 @@
+{% extends "playPadel/base.html" %}
+
+{% block title %} PlayPadel - Prenota {% endblock %}
+
+{% block content %}
+
+    <section class="section py-1" style="min-height: 83vh;">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-left">
+                    <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla lista degli impianti">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="col-md-8 text-center">
+                    <h2>Risultato ricerca</h2>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            {% include 'website/search_template.html' %}
+            <hr class="hr" />
+            {% if object_list %}
+            {% else %}
+                <div class="row d-flex flex-column align-items-center text-center mt-5">
+                    <h5 class="text-danger">Nessun impianto trovato...</h5>
+                    <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark mt-2 w-25" role="button">Torna alla lista impianti</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+{% endblock %}

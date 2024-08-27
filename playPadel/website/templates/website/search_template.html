@@ -1,0 +1,41 @@
+<form action="{% url 'website:cerca_impianto' %}" method="get" class="form-group my-2 needs-validation">
+    <div class="row mt-4">
+        <div class="col-md-6 form-inline">
+            <label for="cercaNomeImpianto" class="ml-4"><strong>Cerca impianto per nome</strong></label>
+            <input class='form-control ml-2 w-50' id="cercaNomeImpianto" name="q" type="search" aria-label="Cerca" placeholder="Nome impianto" required>
+        </div>
+        <div class="col-md-4 form-inline">
+            <label for="cercaPosizioneImpianto"><strong>Oppure per luogo</strong></label>
+            <input class='form-control ml-2 w-50' id="cercaPosizioneImpianto" name="q2" type="search" aria-label="Cerca" placeholder="Via/Città" required>
+        </div>
+        <div class="col-md-2 text-right">
+            <button class="btn btn-outline-success my-2 my-sm-0 mr-4" type="submit">Cerca</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Script per impostare su 'required' solo uno dei due textfield
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = Array.from(
+            document.querySelectorAll('input[name=q], input[name=q2]')
+      );
+
+      const inputListener = e => {
+          inputs
+              .filter(i => i !== e.target)
+              .forEach(i => (i.required = !e.target.value.length));
+      };
+
+      inputs.forEach(i => i.addEventListener('input', inputListener));
+    });
+</script>
+
+<!--
+    <div class="row mt-2">
+        <div class="col-md-6 form-inline mr-2">
+            <label for="rangeNumCampi" class="mt-3"><strong>Numero campi</strong></label>
+            <input type="range" class="form-control-range is-valid" id="rangeNumCampi">
+        </div>
+    </div>
+-->

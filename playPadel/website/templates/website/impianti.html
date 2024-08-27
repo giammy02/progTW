@@ -8,7 +8,9 @@
 
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
-            <h2 class="pb-4">Lista di Impianti disponibili</h2>
+            <h2>Lista di Impianti disponibili</h2>
+            {% include 'website/search_template.html' %}
+            <hr class="hr" />
             <div class="card-deck justify-content-center">
                 {% for impianto in object_list %}
                     <div class="card my-3" style="min-width: 21rem; max-width: 21rem;">

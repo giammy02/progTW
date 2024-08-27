@@ -37,6 +37,5 @@ class PrenotazioneForm(forms.Form):
             'class': 'form-control',
             'type': 'date',
         }),
-        label="Data prenotazione",
         initial=datetime.now().date()
     )

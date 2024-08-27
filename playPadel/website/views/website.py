@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
+from django.db.models import Q
 
 from ..models import *
 from ..forms import PrenotazioneForm
@@ -76,6 +77,18 @@ class ImpiantoDetail(DetailView):
             return redirect('website:conferma_prenotazione')
         else:
             return self.render_to_response(self.get_context_data(form=form))
+
+
+class CercaImpiantoList(ListView):
+    model = Impianto
+    template_name = "website/cerca_impianto.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        object_list = Impianto.objects.filter(
+            Q(nome__icontains=query) | Q(caratteristiche__icontains=query)
+        )
+        return object_list
 
 
 def prenota(request):

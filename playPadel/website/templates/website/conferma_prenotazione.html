@@ -1,16 +1,16 @@
 {% extends "playPadel/base.html" %}
 
-{% block title %} PlayPadel - Prenota {% endblock %}
+{% block title %} PlayPadel - Conferma prenotazione {% endblock %}
 
 {% block content %}
 
     <section class="section py-4" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <h2>Prenotazione Confermata!</h2>
-            <p>Preparati a giocare presso ...</p>
+            <p>Preparati a giocare presso <strong>{{ impianto.nome }}</strong></p>
             <div class="tipo-buttons">
-                <a href="{% url 'website:homepage' %}" class="btn btn-outline-dark mr-2" role="button">Torna alla homepage</a>
-                <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark ml-2" role="button">Torna alla lista impianti</a>
+                <a href="{% url 'website:website:impianti' %}" class="btn btn-outline-dark ml-2" role="button">Torna alla lista impianti</a>
+                <a href="{% url 'website:website:dashboard_cliente' %}" class="btn btn-outline-dark mr-2" role="button">Visualizza prenotazioni</a>
             </div>
         </div>
     </section>

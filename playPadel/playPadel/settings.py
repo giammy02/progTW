@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from django.contrib.messages import constants as messages
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +43,6 @@ INSTALLED_APPS = [
     'website',
     'crispy_forms',
     'crispy_bootstrap4',
-
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/img/")
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
@@ -138,3 +139,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom django auth
 
 AUTH_USER_MODEL = "website.Users"
+
+LOGIN_URL = 'login'
+
+LOGOUT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = 'website:homepage'
+
+LOGOUT_REDIRECT_URL = 'website:homepage'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'error'
+}

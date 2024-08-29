@@ -10,7 +10,7 @@
         <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
                 <div class="col-md-2 text-left">
-                    <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla lista degli impianti">
+                    <a href="{% url 'website:website:impianti' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla lista degli impianti">
                         <i class="bi bi-arrow-left"></i>
                     </a>
                 </div>
@@ -32,14 +32,14 @@
                                 <li class="list-group-item">A partire da {{ impianto.prezzi }}€ l'ora</li>
                             </ul>
                             <div class="card-body">
-                                <a href="{% url 'website:impianto_detail' slug=impianto.slug %}" class="card-link btn btn-outline-primary w-100" role="button">Dettagli</a>
+                                <a href="{% url 'website:website:impianto_detail' slug=impianto.slug %}" class="card-link btn btn-outline-primary w-100" role="button">Dettagli</a>
                             </div>
                         </div>
                     </div>
                 {% empty %}
                     <div class="row d-flex flex-column align-items-center text-center mt-5">
                         <h5 class="text-danger">Nessun impianto trovato...</h5>
-                        <a href="{% url 'website:impianti' %}" class="btn btn-outline-dark mt-2 w-25" role="button">Torna alla lista impianti</a>
+                        <a href="{% url 'website:website:impianti' %}" class="btn btn-outline-dark mt-2 w-25" role="button">Torna alla lista impianti</a>
                     </div>
                 {% endfor %}
             </div>

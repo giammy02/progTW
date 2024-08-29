@@ -1,0 +1,26 @@
+{% extends "playPadel/base.html" %}
+
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block title %} PlayPadel - Accedi {% endblock %}
+
+{% block content %}
+
+    <section class="section py-4" style="min-height: 83vh;">
+        <div class="container bg-white text-black py-5">
+            <h2 class="text-center">Accedi</h2>
+            <form method="post" class="form-control w-50 mx-auto p-5" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                {{ form.username|as_crispy_field }}
+                {{ form.password|as_crispy_field }}
+                <div class="col-md-12 mt-2 text-center">
+                    <button type="submit" class="btn btn-primary">Accedi</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

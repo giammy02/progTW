@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Users(AbstractUser):
-    is_cliente = models.BooleanField('cliente status', default=False)
+    is_cliente = models.BooleanField('cliente status', default=True)
 
 
 class Cliente(models.Model):
@@ -51,7 +51,7 @@ class Prenotazione(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     campo = models.ForeignKey(Campo, on_delete=models.CASCADE)
     impianto = models.ForeignKey(Impianto, on_delete=models.CASCADE)
-    data = models.DateField(blank=False, null=False)
+    data = models.DateField(blank=False, null=False, verbose_name='')
     ora_inizio = models.TimeField(blank=False, null=False)
     ora_fine = models.TimeField(blank=False, null=False)
 

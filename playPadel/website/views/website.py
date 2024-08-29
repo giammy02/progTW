@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
 from django.db.models import Q
@@ -8,22 +8,11 @@ from ..models import *
 from ..forms import PrenotazioneForm
 
 
-class SignInView(TemplateView):
-    template_name = 'playPadel/login.html'
-
-
 class SignUpView(TemplateView):
-    template_name = 'playPadel/signup.html'
+    template_name = 'registration/signup.html'
 
 
 def homepage(request):
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            pass
-            # return redirect('website:impianti')  # PAGINA MODIFICA IMPIANTI
-        else:
-            pass
-            # return redirect('website:impianti')  # PAGINA LISTA IMPIANTI
     return render(request, 'website/homepage.html')
 
 
@@ -70,11 +59,11 @@ class ImpiantoDetail(DetailView):
 
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, slug, *args, **kwargs):
         form = PrenotazioneForm(request.POST)
         if form.is_valid():
             # Process the form data (e.g., save the booking)
-            return redirect('website:conferma_prenotazione')
+            return redirect('website:website:conferma_prenotazione', slug=slug)
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
@@ -95,5 +84,9 @@ def prenota(request):
     return render(request, 'website/prenota.html')
 
 
-def conferma_prenotazione(request):
-    return render(request, 'website/conferma_prenotazione.html')
+def conferma_prenotazione(request, slug):
+    impianto = get_object_or_404(Impianto, slug=slug)
+    return render(request, 'website/conferma_prenotazione.html', {
+        'slug': slug,
+        'impianto': impianto
+    })

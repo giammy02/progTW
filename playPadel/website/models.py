@@ -9,6 +9,7 @@ class Users(AbstractUser):
 
 class Cliente(models.Model):
     user = models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
+    eta = models.IntegerField(blank=False, null=False)
     foto = models.ImageField(upload_to='profile_pics', blank=False, null=False, default='default_profile_pic.png')
 
     class Meta:

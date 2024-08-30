@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PlayPadel - Dashboard</title>
-</head>
-<body>
-    Dashboard gestore
-</body>
-</html>
+{% extends "playPadel/base.html" %}
+
+{% block title %} PlayPadel - Dashboard {% endblock %}
+
+{% block content %}
+
+    <section class="section py-4" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <h2>Dashboard cliente {{ user.username }}</h2>
+
+        </div>
+    </section>
+
+{% endblock %}

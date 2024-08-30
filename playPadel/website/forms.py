@@ -40,3 +40,15 @@ class PrenotazioneForm(forms.ModelForm):
                 'type': 'date',
             }),
         }
+
+
+class CercaDisponibilita(forms.ModelForm):
+
+    class Meta:
+        model = Prenotazione
+        fields = ['data']
+        widgets = {'data': forms.DateTimeInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+        }),
+        }

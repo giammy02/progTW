@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PlayPadel - Dashboard</title>
-</head>
-<body>
-    Dashboard cliente
-</body>
-</html>
+{% extends "playPadel/base.html" %}
+
+{% load static %}
+
+{% block title %} PlayPadel - Dashboard {% endblock %}
+
+{% block content %}
+
+    <section class="section py-4" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <h2>Dashboard cliente <strong>{{ user.username }}</strong></h2>
+            <div class="row">
+                <i class="bi bi-person-lines-fill mr-3" style="font-size: 1.3rem"></i>
+                <h4>Dati utente</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6 border-right border-dark">
+                    <div class="row mt-2">
+                        <div class="col-md-6 text-left">
+                            <strong>Nome: </strong> {{ user.first_name }}
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <strong>Età: </strong> {{ user.cliente.eta }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6 text-left">
+                            <strong>Cognome:</strong> {{ user.last_name }}
+                        </div>
+                        <div class="col-md-6 text-left">
+                            <strong>Id utente: </strong> {{ user.id }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <strong>Email:</strong> {{ user.email }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <strong>Data creazione:</strong> {{ user.date_joined.date }}
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center">
+                            <a href="" class="card-link btn btn-outline-dark w-75" role="button">Modifica informazioni</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-12 mx-auto">
+                        <strong>Foto profilo</strong>
+                    </div>
+                    <div class="col-md-12 mt-2 mx-auto">
+                        <img src="{% static 'img/profile_pics' %}/{{ user.cliente.foto }}" class="img-fluid" style="width: 50%; height: 50%;" alt="Foto cliente">
+                    </div>
+                    <div class="col-md-12 mx-auto">
+                        <a href="" class="card-link btn btn-outline-info w-75" role="button">Cambia immagine</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

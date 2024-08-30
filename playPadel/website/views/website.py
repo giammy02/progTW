@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from django.contrib import messages
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView
@@ -6,6 +8,14 @@ from django.db.models import Q
 
 from ..models import *
 from ..forms import PrenotazioneForm
+
+
+class MyLoginView(LoginView):
+    template_name = 'registration/login.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Login eseguito con successo!')
+        return super().form_valid(form)
 
 
 class SignUpView(TemplateView):
@@ -80,8 +90,16 @@ class CercaImpiantoList(ListView):
         return object_list
 
 
-def prenota(request):
-    return render(request, 'website/prenota.html')
+class Prenota(ListView):
+    model = Impianto
+    template_name = "website/prenota.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        object_list = Impianto.objects.filter(
+            Q(nome__icontains=query) | Q(caratteristiche__icontains=query)
+        )
+        return object_list
 
 
 def conferma_prenotazione(request, slug):

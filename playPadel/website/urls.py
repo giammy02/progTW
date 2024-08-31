@@ -19,6 +19,8 @@ urlpatterns = [
     path('cliente/', include(([
         path('registrati/', cliente.ClienteSignUpView.as_view(), name='registra_cliente'),
         path('dashboard/', cliente.dashboardCliente, name='dashboard_cliente'),
+        path('prenotazioni/', cliente.prenotazioniCliente, name='prenotazioni_cliente'),
+        path('storico/', cliente.storicoCliente, name='storico_cliente'),
     ], 'cliente'), namespace='cliente')),
 
     path('gestore/', include(([

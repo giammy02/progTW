@@ -62,6 +62,7 @@ class Prenotazione(models.Model):
 
 class Partita(models.Model):
     prenotazione = models.ForeignKey(Prenotazione, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     risultato = models.CharField(max_length=50)
     giocatori = models.CharField(max_length=255)
 

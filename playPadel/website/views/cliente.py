@@ -3,10 +3,10 @@ from django.contrib.auth import login, logout
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from ..forms import ClienteSignUpForm
-from ..models import Cliente, Prenotazione, Partita
+from ..models import *
 
 
 class ClienteSignUpView(CreateView):
@@ -29,10 +29,42 @@ def logout_request(request):
 @login_required
 def dashboardCliente(request):
     user = request.user
-    # model = Prenotazione, Partita
+    prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
+    impianto = Impianto.objects.filter(id=prenotazione.values('impianto_id').first()['impianto_id'])
+    campo = Campo.objects.filter(id=prenotazione.values('campo_id').first()['campo_id'])
+    partita = Partita.objects.filter(cliente_id=user.pk)
     context = {
         'user': user,
-        # filtrare prenotazione e partita
+        'prenotazioni': prenotazione,
+        'impianto': impianto,
+        'campo': campo,
+        'partite': partita
     }
     return render(request, 'cliente/dashboard_cliente.html', context)
 
+
+@login_required
+def prenotazioniCliente(request):
+    user = request.user
+    prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
+    context = {
+        'user': user,
+        'prenotazioni': prenotazione
+    }
+    return render(request, 'cliente/prenotazioni_cliente.html', context)
+
+
+def storicoCliente(request):
+    user = request.user
+    prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
+    impianto = Impianto.objects.filter(id=prenotazione.values('impianto_id').first()['impianto_id'])
+    campo = Campo.objects.filter(id=prenotazione.values('campo_id').first()['campo_id'])
+    partita = Partita.objects.filter(cliente_id=user.pk)
+    context = {
+        'user': user,
+        'prenotazioni': prenotazione,
+        'impianto': impianto,
+        'campo': campo,
+        'partite': partita
+    }
+    return render(request, 'cliente/storico_cliente.html', context)

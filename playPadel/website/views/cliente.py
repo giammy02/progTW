@@ -33,12 +33,17 @@ def dashboardCliente(request):
     impianto = Impianto.objects.filter(id=prenotazione.values('impianto_id').first()['impianto_id'])
     campo = Campo.objects.filter(id=prenotazione.values('campo_id').first()['campo_id'])
     partita = Partita.objects.filter(cliente_id=user.pk)
+    for p in partita:
+        lista_giocatori = p.giocatori.split(', ')
+        risultato = p.risultato.split(', ')
     context = {
         'user': user,
         'prenotazioni': prenotazione,
         'impianto': impianto,
         'campo': campo,
-        'partite': partita
+        'partite': partita,
+        'lista_giocatori': lista_giocatori,
+        'risultato': risultato
     }
     return render(request, 'cliente/dashboard_cliente.html', context)
 
@@ -54,6 +59,7 @@ def prenotazioniCliente(request):
     return render(request, 'cliente/prenotazioni_cliente.html', context)
 
 
+'''
 def storicoCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
@@ -68,3 +74,13 @@ def storicoCliente(request):
         'partite': partita
     }
     return render(request, 'cliente/storico_cliente.html', context)
+'''
+
+
+@login_required
+def modificaCliente(request):
+    user = request.user
+    context = {
+        'user': user
+    }
+    return render(request, 'cliente/modifica_cliente.html', context)

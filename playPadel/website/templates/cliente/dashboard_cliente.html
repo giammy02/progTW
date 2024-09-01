@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    <section class="section py-4" style="min-height: 83vh;">
+    <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <h2>Dashboard cliente <strong>{{ user.username }}</strong></h2>
             <div class="row mt-4">
@@ -72,11 +72,11 @@
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6 text-left">
+                        <div class="col-md-4 text-left">
                             <i class="bi bi-calendar mr-1"></i>
                             {{ prenotazioni.last.data }}
                         </div>
-                        <div class="col-md-6 text-left">
+                        <div class="col-md-8 text-left">
                             <i class="bi bi-clock-fill mr-1"></i>
                             {{ prenotazioni.last.ora_inizio }} - {{ prenotazioni.last.ora_fine }}
                         </div>
@@ -98,6 +98,46 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row mt-5">
+                <i class="bi bi-clock-history mr-3" style="font-size: 1.3rem"></i><h4>Storico partite</h4>
+            </div>
+            <div class="card-deck justify-content-center mt-2">
+                {% for p in partite %}
+                    <div class="card bg-light my-3" style="min-width: 20rem; max-width: 20rem;">
+                        <div class="card-header">{{ p.prenotazione.data }} | {{ p.prenotazione.ora_inizio }}</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 text-left my-auto">
+                                    <h5>
+                                        {% for set in p.risultato.all %}
+                                            {{ set }}
+                                        {% endfor %}
+                                    </h5>
+                                </div>
+                                <div class="col-md-2 text-center my-auto">
+                                    <i class="bi bi-trophy-fill"></i>
+                                </div>
+                                <div class="col-md-7 my-auto">
+                                    {% for giocatore in p.lista_giocatori.all %}
+                                        {{ giocatore }}
+                                        {% if forloop.counter == 1 or forloop.counter == 3 %}
+                                            |
+                                        {% endif %}
+                                        {% if forloop.counter == 2 %}
+                                            <br>&times;<br>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ p.prenotazione.impianto.nome }} <br> Campo {{ p.prenotazione.campo.id }} {{ p.prenotazione.campo.tipologia }}
+                        </div>
+                    </div>
+                {% empty %}
+                    <h5 class="py-4 mt-4">Ancora nessuna partita giocata...</h5>
+                {% endfor %}
             </div>
         </div>
     </section>

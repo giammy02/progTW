@@ -36,13 +36,15 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
                                 <h6 class="dropdown-header">Accesso effettuato come <strong>{{ user.username }}</strong></h6>
                                 {% if user.is_cliente %}
-                                    <a href="{% url 'website:cliente:dashboard_cliente' %}" class="dropdown-item">Profilo</a>
+                                    <a href="{% url 'website:cliente:dashboard_cliente' %}" class="dropdown-item">Dashboard & Storico</a>
+                                    <a href="{% url 'website:cliente:modifica_cliente' %}" class="dropdown-item">Modifica dati</a>
                                     <a href="{% url 'website:cliente:prenotazioni_cliente' %}" class="dropdown-item">Prenotazioni</a>
-                                    <a href="{% url 'website:cliente:storico_cliente' %}" class="dropdown-item">Storico</a>
                                 {% elif user.is_staff %}
-                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Profilo</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Dashboard</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Modifica dati</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Gestisci impianto</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Modifica impianto</a>
                                 {% endif %}
-                                <a href="{% url 'website:homepage' %}" class="dropdown-item">Modifica dati</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="{% url 'logout' %}" class="dropdown-item">Esci</a>
                             </div>

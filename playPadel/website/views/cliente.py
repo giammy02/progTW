@@ -30,20 +30,27 @@ def logout_request(request):
 def dashboardCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
-    impianto = Impianto.objects.filter(id=prenotazione.values('impianto_id').first()['impianto_id'])
-    campo = Campo.objects.filter(id=prenotazione.values('campo_id').first()['campo_id'])
     partita = Partita.objects.filter(cliente_id=user.pk)
+    dati_partita = []
     for p in partita:
+        data = p.prenotazione.data
+        ora = p.prenotazione.ora_inizio
         lista_giocatori = p.giocatori.split(', ')
         risultato = p.risultato.split(', ')
+        nome_impianto = p.prenotazione.impianto.nome
+        id_campo = p.prenotazione.campo_id
+        dati_partita.append({
+            'data': data,
+            'ora': ora,
+            'giocatori': lista_giocatori,
+            'risultato': risultato,
+            'nome_impianto': nome_impianto,
+            'id_campo': id_campo
+        })
     context = {
         'user': user,
         'prenotazioni': prenotazione,
-        'impianto': impianto,
-        'campo': campo,
-        'partite': partita,
-        'lista_giocatori': lista_giocatori,
-        'risultato': risultato
+        'dati_partita': dati_partita
     }
     return render(request, 'cliente/dashboard_cliente.html', context)
 

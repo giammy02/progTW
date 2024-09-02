@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">
-                            <a href="" class="btn btn-outline-dark btn-sm" role="button">Modifica informazioni</a>
+                            <a href="{% url 'website:cliente:modifica_cliente' %}" class="btn btn-outline-dark btn-sm" role="button">Modifica informazioni</a>
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-right">
-                            <a href="" class="btn btn-outline-info btn-sm " role="button">Cambia immagine</a>
+                            <a href="{% url 'website:cliente:modifica_cliente' %}" class="btn btn-outline-info btn-sm " role="button">Cambia immagine</a>
                         </div>
                         <div class="col-md-12 mt-2">
                             <img src="{% static 'img/profile_pics' %}/{{ user.cliente.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto cliente">
@@ -103,23 +103,23 @@
                 <i class="bi bi-clock-history mr-3" style="font-size: 1.3rem"></i><h4>Storico partite</h4>
             </div>
             <div class="card-deck justify-content-center mt-2">
-                {% for p in partite %}
-                    <div class="card bg-light my-3" style="min-width: 20rem; max-width: 20rem;">
-                        <div class="card-header">{{ p.prenotazione.data }} | {{ p.prenotazione.ora_inizio }}</div>
+                {% for p in dati_partita %}
+                    <div class="card bg-light my-3" style="min-width: 30rem; max-width: 33rem;">
+                        <div class="card-header">{{ p.data }} | {{ p.ora }}</div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-3 text-left my-auto">
+                                <div class="col-md-3 text-center my-auto">
                                     <h5>
-                                        {% for set in p.risultato.all %}
-                                            {{ set }}
+                                        {% for set in p.risultato %}
+                                            {{ set }} <br>
                                         {% endfor %}
                                     </h5>
                                 </div>
                                 <div class="col-md-2 text-center my-auto">
                                     <i class="bi bi-trophy-fill"></i>
                                 </div>
-                                <div class="col-md-7 my-auto">
-                                    {% for giocatore in p.lista_giocatori.all %}
+                                <div class="col-md-7 text-center my-auto">
+                                    {% for giocatore in p.giocatori %}
                                         {{ giocatore }}
                                         {% if forloop.counter == 1 or forloop.counter == 3 %}
                                             |
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-muted">
-                            {{ p.prenotazione.impianto.nome }} <br> Campo {{ p.prenotazione.campo.id }} {{ p.prenotazione.campo.tipologia }}
+                            {{ p.nome_impianto }} <br> Campo {{ p.id_campo }}
                         </div>
                     </div>
                 {% empty %}

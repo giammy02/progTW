@@ -7,11 +7,15 @@
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
-                <div class="col-md-2 text-left">
-                    <a href="{% url 'website:cliente:dashboard_cliente' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla dashboard">
-                        <i class="bi bi-arrow-left mr-2"></i>Dashboard
-                    </a>
-                </div>
+                {% if pre_url == dashboard_url %}
+                    <div class="col-md-2 text-left">
+                        <a href="{% url 'website:cliente:dashboard_cliente' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla dashboard">
+                            <i class="bi bi-arrow-left mr-2"></i>Dashboard
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-md-2"></div>
+                {% endif %}
                 <div class="col-md-8 text-center">
                     <h2>Modifica dati</h2>
                 </div>

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import redirect
@@ -59,35 +61,49 @@ def dashboardCliente(request):
 def prenotazioniCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
+    pre_url = request.META.get('HTTP_REFERER')
+    d_url = request.build_absolute_uri('/cliente/dashboard/')
+    today = datetime.now().date()
+    now = datetime.now().time()
+    dati_prenotazione = []
+    for pren in prenotazione:
+        pren_id = pren.id
+        data = pren.data
+        ora_inizio = pren.ora_inizio
+        ora_fine = pren.ora_fine
+        nome_impianto = pren.impianto.nome
+        id_campo = pren.campo_id
+        if pren.data < today:
+            stato = "Passato"
+        elif pren.data >= today and pren.ora_inizio >= now:
+            stato = "Attivo"
+        dati_prenotazione.append({
+            'pren_id': pren_id,
+            'stato': stato,
+            'data': data,
+            'ora_inizio': ora_inizio,
+            'ora_fine': ora_fine,
+            'nome_impianto': nome_impianto,
+            'id_campo': id_campo,
+        })
     context = {
         'user': user,
-        'prenotazioni': prenotazione
+        'prenotazione': prenotazione,
+        'dati_prenotazione': dati_prenotazione,
+        'pre_url': pre_url,
+        'dashboard_url': d_url
     }
     return render(request, 'cliente/prenotazioni_cliente.html', context)
-
-
-'''
-def storicoCliente(request):
-    user = request.user
-    prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
-    impianto = Impianto.objects.filter(id=prenotazione.values('impianto_id').first()['impianto_id'])
-    campo = Campo.objects.filter(id=prenotazione.values('campo_id').first()['campo_id'])
-    partita = Partita.objects.filter(cliente_id=user.pk)
-    context = {
-        'user': user,
-        'prenotazioni': prenotazione,
-        'impianto': impianto,
-        'campo': campo,
-        'partite': partita
-    }
-    return render(request, 'cliente/storico_cliente.html', context)
-'''
 
 
 @login_required
 def modificaCliente(request):
     user = request.user
+    pre_url = request.META.get('HTTP_REFERER')
+    d_url = request.build_absolute_uri('/cliente/dashboard/')
     context = {
-        'user': user
+        'user': user,
+        'pre_url': pre_url,
+        'dashboard_url': d_url
     }
     return render(request, 'cliente/modifica_cliente.html', context)

@@ -23,19 +23,16 @@
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6 text-left">
-                            <strong>Nome: </strong> {{ user.first_name }}
-                        </div>
-                        <div class="col-md-6 text-left">
-                            <strong>Età: </strong> {{ user.cliente.eta }}
+                        <div class="col-md-12 text-left">
+                            <strong>Username: </strong> {{ user.username }}
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6 text-left">
-                            <strong>Cognome: </strong> {{ user.last_name }}
+                        <div class="col-md-8 text-left">
+                            <strong>Nome & Cognome: </strong>{{ user.first_name }} {{ user.last_name }}
                         </div>
-                        <div class="col-md-6 text-left">
-                            <strong>Id utente: </strong> {{ user.id }}
+                        <div class="col-md-4 text-left">
+                            <strong>Età: </strong> {{ user.cliente.eta }}
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -44,8 +41,11 @@
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-12 text-left">
+                        <div class="col-md-8 text-left">
                             <strong>Data creazione account: </strong> {{ user.date_joined.date }}
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <strong>Id utente: </strong> {{ user.id }}
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -63,35 +63,29 @@
                         <strong>Ultima prenotazione: </strong>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-7 text-left">
+                        <div class="col-md-12 text-left">
                             <i class="bi bi-geo-alt mr-1"></i>
                             {{ prenotazioni.last.impianto.nome }} - Campo {{ prenotazioni.last.campo.id }} {{ prenotazioni.last.campo.tipologia }}
                         </div>
-                        <div class="col-md-5 text-left">
-
-                        </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-4 text-left">
+                        <div class="col-md-6 text-left">
                             <i class="bi bi-calendar mr-1"></i>
-                            {{ prenotazioni.last.data|date:'d-m-Y' }}
+                            {{ prenotazioni.last.data }}
                         </div>
-                        <div class="col-md-8 text-left">
+                        <div class="col-md-6 text-left">
                             <i class="bi bi-clock mr-1"></i>
-                            {{ prenotazioni.last.ora_inizio|date:'H:i' }} - {{ prenotazioni.last.ora_fine|date:'H:i' }}
+                            {{ prenotazioni.last.ora_inizio }} - {{ prenotazioni.last.ora_fine }}
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="row ml-2">
-                        <div class="col-md-6 text-left">
+                        <div class="col-md-12 text-left">
                             <div class="row">
                                 <i class="bi bi-person-square mr-3" style="font-size: 1.3rem"></i>
                                 <h4>Foto profilo</h4>
                             </div>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <a href="{% url 'website:cliente:modifica_cliente' %}" class="btn btn-outline-info btn-sm " role="button">Cambia immagine</a>
                         </div>
                         <div class="col-md-12 mt-2">
                             <img src="{% static 'img/profile_pics' %}/{{ user.cliente.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto cliente">
@@ -105,7 +99,7 @@
             <div class="card-deck justify-content-center mt-2">
                 {% for p in dati_partita %}
                     <div class="card bg-light my-3" style="min-width: 30rem; max-width: 33rem;">
-                        <div class="card-header">{{ p.data|date:'d-m-Y' }} | {{ p.ora|date:'H:i' }}</div>
+                        <div class="card-header">{{ p.data }} | {{ p.ora }}</div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 text-center my-auto">

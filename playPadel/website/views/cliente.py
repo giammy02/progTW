@@ -2,12 +2,12 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.contrib.auth import update_session_auth_hash
+from django.views.generic import CreateView
 
-from ..forms import ClienteSignUpForm
+from ..forms import ClienteSignUpForm, EditClienteForm, UserForm
 from ..models import *
 
 
@@ -64,7 +64,6 @@ def prenotazioniCliente(request):
     pre_url = request.META.get('HTTP_REFERER')
     d_url = request.build_absolute_uri('/cliente/dashboard/')
     today = datetime.now().date()
-    now = datetime.now().time()
     dati_prenotazione = []
     for pren in prenotazione:
         pren_id = pren.id
@@ -75,7 +74,7 @@ def prenotazioniCliente(request):
         id_campo = pren.campo_id
         if pren.data < today:
             stato = "Passato"
-        elif pren.data >= today and pren.ora_inizio >= now:
+        elif pren.data >= today:
             stato = "Attivo"
         dati_prenotazione.append({
             'pren_id': pren_id,
@@ -85,6 +84,7 @@ def prenotazioniCliente(request):
             'ora_fine': ora_fine,
             'nome_impianto': nome_impianto,
             'id_campo': id_campo,
+            'today': today
         })
     context = {
         'user': user,
@@ -101,9 +101,38 @@ def modificaCliente(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
     d_url = request.build_absolute_uri('/cliente/dashboard/')
+
+    if request.method == 'POST':
+        cliente_form = EditClienteForm(request.POST, request.FILES, instance=request.user.cliente)
+        user_form = UserForm(request.POST, instance=request.user)
+
+        if cliente_form.is_valid() and user_form.is_valid():
+            user = user_form.save()
+            cliente = cliente_form.save(commit=False)
+            cliente.user = user
+            cliente.save()
+
+            # Gestione cambio password
+            if cliente_form.cleaned_data['new_password1']:
+                user.set_password(cliente_form.cleaned_data['new_password1'])
+                user.save()
+                update_session_auth_hash(request, user)  # Mantiene l'utente loggato dopo il cambio password
+
+            messages.success(request, 'Profilo aggiornato correttamente')
+            return redirect('website:cliente:dashboard_cliente')
+
+        else:
+            messages.error(request, 'Si è verificato un errore. Controlla i dati inseriti.')
+    else:
+        cliente_form = EditClienteForm(instance=request.user.cliente)
+        user_form = UserForm(instance=request.user)
+
     context = {
         'user': user,
         'pre_url': pre_url,
-        'dashboard_url': d_url
+        'dashboard_url': d_url,
+        'cliente_form': cliente_form,
+        'user_form': user_form
     }
+
     return render(request, 'cliente/modifica_cliente.html', context)

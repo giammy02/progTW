@@ -40,10 +40,9 @@
                                     <a href="{% url 'website:cliente:modifica_cliente' %}" class="dropdown-item">Modifica dati</a>
                                     <a href="{% url 'website:cliente:prenotazioni_cliente' %}" class="dropdown-item">Prenotazioni</a>
                                 {% elif user.is_staff %}
-                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Dashboard</a>
-                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Modifica dati</a>
-                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Gestisci impianto</a>
-                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Modifica impianto</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Dashboard & Impianto</a>
+                                    <a href="{% url 'website:gestore:modifica_gestore' %}" class="dropdown-item">Modifica dati</a>
+                                    <a href="{% url 'website:gestore:modifica_impianto_gestore' %}" class="dropdown-item">Modifica impianto</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <a href="{% url 'logout' %}" class="dropdown-item">Esci</a>
@@ -77,21 +76,12 @@
 
         {% if messages %}
             {% for message in messages %}
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Errore! </strong> {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% else %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Successo! </strong> {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endif %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             {% endfor %}
         {% endif %}
 

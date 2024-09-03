@@ -1,13 +1,126 @@
 {% extends "playPadel/base.html" %}
 
+{% load static %}
+
 {% block title %} PlayPadel - Dashboard {% endblock %}
 
 {% block content %}
 
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
-            <h2>Dashboard cliente {{ user.username }}</h2>
-
+            <h2>Dashboard gestore <strong>{{ user.username }}</strong></h2>
+            <div class="row mt-4">
+                <div class="col-md-6 border-right border-dark">
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <div class="row">
+                                <i class="bi bi-person-lines-fill mr-3" style="font-size: 1.3rem"></i>
+                                <h4>Dati utente</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="{% url 'website:gestore:modifica_gestore' %}" class="btn btn-outline-dark btn-sm" role="button">Modifica informazioni</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-8 text-left">
+                            <strong>Username: </strong> {{ user.username }}
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <strong>Id utente: </strong> {{ user.id }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <strong>Nome & Cognome: </strong>{{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <strong>Email: </strong> {{ user.email }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <strong>Data creazione account: </strong> {{ user.date_joined.date }}
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8 text-left">
+                            <div class="row">
+                                <i class="bi bi-gear-fill mr-3" style="font-size: 1.3rem"></i>
+                                <h4 class="mb-0">Impianto</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="{% url 'website:gestore:modifica_impianto_gestore' %}" class="btn btn-outline-info btn-sm" role="button">Modifica Impianto</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <i class="bi bi-geo-alt mr-1"></i>
+                            {{ impianto.nome }} - {{ impianto.posizione }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-4 text-left">
+                            <strong>Numero campi:</strong> {{ impianto.numero_campi }}
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <strong>Orari:</strong> {{ impianto.orari }}
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <strong>Prezzi</strong> {{ impianto.prezzi }}€ l'ora
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <i class="bi bi-chat-right mr-1"></i>
+                            {{ impianto.contatti }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-left">
+                            <i class="bi bi-info-circle mr-1"></i>
+                            {{ impianto.caratteristiche }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item w-50">
+                            <a class="nav-link active text-dark" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">
+                                <div class="row mx-auto">
+                                    <i class="bi bi-person-square mr-3" style="font-size: 1.2rem"></i>
+                                    <h5>Foto profilo</h5>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item w-50">
+                            <a class="nav-link text-dark" id="impianto-tab" data-toggle="tab" href="#impianto" role="tab" aria-controls="impianto" aria-selected="false">
+                                <div class="row mx-auto">
+                                    <i class="bi bi-image mr-3" style="font-size: 1.2rem"></i>
+                                    <h5>Foto impianto</h5>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-4" id="myTabContent">
+                        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <img src="{% static 'img/profile_pics' %}/{{ user.gestore.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto gestore">
+                        </div>
+                        <div class="tab-pane fade" id="impianto" role="tabpanel" aria-labelledby="impianto-tab">
+                            <img src="{% static 'img/media' %}/{{ impianto.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto impianto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <i class="bi bi-newspaper mr-3" style="font-size: 1.3rem"></i><h4>News Impianto</h4>
+            </div>
+            <div class="row mt-4">
+                <i class="bi bi-calendar3 mr-3" style="font-size: 1.3rem"></i><h4>Prenotazioni clienti</h4>
+            </div>
         </div>
     </section>
 

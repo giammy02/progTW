@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import AbstractUser
@@ -75,6 +77,7 @@ class News(models.Model):
     impianto = models.ForeignKey(Impianto, on_delete=models.CASCADE)
     titolo = models.CharField(max_length=255)
     descrizione = models.CharField(max_length=501)
+    data = models.DateField(blank=False, null=False, default=timezone.now)
 
     class Meta:
         verbose_name_plural = 'News'

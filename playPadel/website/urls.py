@@ -20,12 +20,13 @@ urlpatterns = [
         path('registrati/', cliente.ClienteSignUpView.as_view(), name='registra_cliente'),
         path('dashboard/', cliente.dashboardCliente, name='dashboard_cliente'),
         path('prenotazioni/', cliente.prenotazioniCliente, name='prenotazioni_cliente'),
-        # path('storico/', cliente.storicoCliente, name='storico_cliente'),
         path('modifica/', cliente.modificaCliente, name='modifica_cliente'),
     ], 'cliente'), namespace='cliente')),
 
     path('gestore/', include(([
         path('registrati/', gestore.GestoreSignUpView.as_view(), name='registra_gestore'),
         path('dashboard/', gestore.dashboardGestore, name='dashboard_gestore'),
+        path('modifica/', gestore.modificaGestore, name='modifica_gestore'),
+        path('modifica_impianto/', gestore.modificaImpianto, name='modifica_impianto_gestore'),
     ], 'gestore'), namespace='gestore')),
 ]

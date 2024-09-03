@@ -21,6 +21,52 @@
                 </div>
                 <div class="col-md-2"></div>
             </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mt-4 justify-content-between">
+                    <div class="form-inline mx-3">
+                        <label for="username" class="mr-2">Username:</label>
+                        {{ user_form.username }}
+                    </div>
+                    <div class="form-inline mx-3">
+                        <label for="first_name" class="mr-2">Nome:</label>
+                        {{ user_form.first_name }}
+                    </div>
+                    <div class="form-inline mx-3">
+                        <label for="last_name" class="mr-2">Cognome:</label>
+                        {{ user_form.last_name }}
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-start">
+                    <div class="form-inline mx-3">
+                        <label for="email" class="mr-2">Email:</label>
+                        {{ user_form.email }}
+                    </div>
+                    <div class="form-inline mx-3">
+                        <label for="eta" class="mr-2">Età:</label>
+                        {{ cliente_form.eta }}
+                    </div>
+                </div>
+                <div class="form-control-file my-3">
+                    <label for="foto" class="mr-2">Foto profilo:</label>
+                    {{ cliente_form.foto }}
+                </div>
+                <hr>
+                <div class="form-inline my-3">
+                    <label for="old_password" class="mr-2">Vecchia Password:</label>
+                    {{ cliente_form.old_password }}
+                </div>
+                <div class="form-inline my-3">
+                    <label for="new_password1" class="mr-2">Nuova Password:</label>
+                    {{ cliente_form.new_password1 }}
+                </div>
+                <div class="form-inline my-3">
+                    <label for="new_password2" class="mr-2">Conferma Nuova Password:</label>
+                    {{ cliente_form.new_password2 }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+            </form>
         </div>
     </section>
 

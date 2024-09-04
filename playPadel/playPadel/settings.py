@@ -149,5 +149,9 @@ LOGIN_REDIRECT_URL = 'website:homepage'
 LOGOUT_REDIRECT_URL = 'website:homepage'
 
 MESSAGE_TAGS = {
-    messages.ERROR: 'error'
-}
+        messages.DEBUG: 'secondary',
+        messages.INFO: 'info',
+        messages.SUCCESS: 'success',
+        messages.WARNING: 'warning',
+        messages.ERROR: 'danger',
+ }

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
@@ -13,9 +14,19 @@ from ..forms import PrenotazioneForm
 class MyLoginView(LoginView):
     template_name = 'registration/login.html'
 
+    def form_invalid(self, form):
+        messages.error(self.request, 'Credenziali non valide. Riprova.')
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         messages.success(self.request, 'Login eseguito con successo!')
         return super().form_valid(form)
+
+
+def logout_request(request):
+    logout(request)
+    messages.success(request, 'Logout eseguito con successo!')
+    return redirect("website:homepage")
 
 
 class SignUpView(TemplateView):

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
@@ -20,12 +20,6 @@ class ClienteSignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('homepage.html')
-
-
-def logout_request(request):
-    logout(request)
-    messages.success(request, 'Logout eseguito con successo!')
-    return redirect("website:homepage")
 
 
 @login_required

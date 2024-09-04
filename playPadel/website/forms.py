@@ -31,14 +31,17 @@ class GestoreSignUpForm(UserCreationForm):
 class EditClienteForm(forms.ModelForm):
     old_password = forms.CharField(
         label="Vecchia Password",
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        error_messages={"required": "Inserire la vecchia password per validare le modifiche"}
     )
     new_password1 = forms.CharField(
         label="Nuova Password",
+        required=False,
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
     new_password2 = forms.CharField(
         label="Conferma Nuova Password",
+        required=False,
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
 

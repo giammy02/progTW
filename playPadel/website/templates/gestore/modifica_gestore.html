@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "playPadel/base.html" %}
 
-</body>
-</html>
+{% block title %} PlayPadel - Modifica dati {% endblock %}
+
+{% block content %}
+
+    <section class="section py-1" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <div class="row align-items-center">
+                {% if pre_url == dashboard_url %}
+                    <div class="col-md-2 text-left">
+                        <a href="{% url 'website:gestore:dashboard_gestore' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla dashboard">
+                            <i class="bi bi-arrow-left mr-2"></i>Dashboard
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-md-2"></div>
+                {% endif %}
+                <div class="col-md-8 text-center">
+                    <h2>Modifica dati gestore</h2>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

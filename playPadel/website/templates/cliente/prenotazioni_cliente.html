@@ -4,6 +4,26 @@
 
 {% block content %}
 
+    <div class="modal fade" id="ModalConferma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Stai per eliminare questa prenotazione! Sei sicuro di voler continuare?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                    <a href="{% url 'website:homepage' %}" role="button" class="btn btn-primary">Conferma</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
@@ -43,14 +63,14 @@
                                 {% for p in dati_prenotazione reversed %}
                                     <li class="list-group-item">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">{{ p.data|date:'d-m-Y' }} | {{ p.ora_inizio|date:'H:i' }} - {{ p.ora_fine|date:'H:i' }}</h5>
+                                            <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
                                             {% if p.stato == 'Attivo' %}
                                                 <a href="{% url 'website:homepage' %}" class="btn btn-outline-danger btn-sm " role="button" data-toggle="tooltip" data-placement="top" title="Cancella prenotazione">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             {% endif %}
                                         </div>
-                                        <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.id_campo }}</p>
+                                        <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.num_campo }}</p>
                                         <small><strong>ID prenotazione: </strong>{{ p.pren_id }}</small>
                                     </li>
                                 {% empty %}
@@ -64,14 +84,14 @@
                                     {% if p.stato == 'Attivo' %}
                                         <li class="list-group-item">
                                             <div class="d-flex w-100 justify-content-between">
-                                                <h5 class="mb-1">{{ p.data|date:'d-m-Y' }} | {{ p.ora_inizio|date:'H:i' }} - {{ p.ora_fine|date:'H:i' }}</h5>
+                                                <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
                                                 {% if p.stato == 'Attivo' %}
-                                                    <a href="{% url 'website:homepage' %}" class="btn btn-outline-danger btn-sm " role="button" data-toggle="tooltip" data-placement="top" title="Cancella prenotazione">
+                                                    <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" title="Cancella prenotazione" data-target="#ModalConferma">
                                                         <i class="bi bi-trash"></i>
-                                                    </a>
+                                                    </button>
                                                 {% endif %}
                                             </div>
-                                            <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.id_campo }}</p>
+                                            <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.num_campo }}</p>
                                             <small><strong>ID prenotazione: </strong>{{ p.pren_id }}</small>
                                         </li>
                                     {% endif %}
@@ -86,10 +106,10 @@
                                     {% if p.stato == 'Passato' %}
                                         <li class="list-group-item">
                                             <div class="d-flex w-100 justify-content-between">
-                                                <h5 class="mb-1">{{ p.data|date:'d-m-Y' }} | {{ p.ora_inizio|date:'H:i' }} - {{ p.ora_fine|date:'H:i' }}</h5>
+                                                <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
                                             </div>
                                             <p class="mb-1 text-left">
-                                                <strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.id_campo }}
+                                                <strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.num_campo }}
                                             </p>
                                             <small><strong>ID prenotazione: </strong>{{ p.pren_id }}</small>
                                         </li>

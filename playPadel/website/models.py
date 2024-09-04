@@ -43,6 +43,7 @@ class Impianto(models.Model):
 
 
 class Campo(models.Model):
+    numero = models.IntegerField(blank=False, null=False)
     tipologia = models.CharField(max_length=50, blank=False, null=False)
     impianto = models.ForeignKey(Impianto, on_delete=models.CASCADE)
 

@@ -6,6 +6,26 @@
 
 {% block content %}
 
+    <div class="modal fade" id="ModalConferma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Stai per eliminare una <strong>prenotazione effettuata da un cliente!</strong><br>Sei sicuro di voler continuare?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                    <a href="{% url 'website:homepage' %}" role="button" class="btn btn-primary">Continua</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <h2>Dashboard gestore <strong>{{ user.username }}</strong></h2>
@@ -117,9 +137,63 @@
             </div>
             <div class="row mt-5">
                 <i class="bi bi-newspaper mr-3" style="font-size: 1.3rem"></i><h4>News Impianto</h4>
+                <div class="col-md-12">
+                    <ul class="list-group list-group-flush">
+                        {% for n in news %}
+                            <li class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"><strong>Titolo: </strong>{{ n.titolo }}</h5>
+                                    <div>
+                                        <a class="btn btn-outline-info btn-sm " role="button" data-placement="top" id="{{ n.id }}" data-target="tooltip" title="Modifica news">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a class="btn btn-outline-danger btn-sm " role="button" data-placement="top" id="{{ n.id }}" data-target="tooltip" title="Cancella news">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <p class="mb-1 text-left">
+                                    <strong>Descrizione:</strong>
+                                    {{ n.descrizione }}
+                                </p>
+                                <small class="text-muted">{{ n.data }}</small>
+                            </li>
+                        {% empty %}
+                            <h5 class="py-4 mt-4 text-center">Nessuna news pubblicata...</h5>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
+            <hr class="hr" />
             <div class="row mt-4">
-                <i class="bi bi-calendar3 mr-3" style="font-size: 1.3rem"></i><h4>Prenotazioni clienti</h4>
+                <i class="bi bi-calendar3 mr-3" style="font-size: 1.3rem"></i>
+                <h4 class="mb-0">Prenotazioni clienti</h4>
+                {% if prenotazioni_clienti %}
+                    <span class="badge badge-primary ml-3 my-auto">{{ prenotazioni_clienti.count }}</span>
+                {% else %}
+                    <span class="badge badge-primary ml-3 my-auto">0</span>
+                {% endif %}
+                <div class="col-md-12">
+                    <ul class="list-group list-group-flush">
+                        {% for p in prenotazioni_clienti %}
+                            <li class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
+                                    <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" id="{{ p.id }}" data-target="#ModalConferma" title="Cancella prenotazione">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="mb-1 text-left">
+                                    <strong>Impianto: </strong>{{ p.impianto.nome }} - Campo {{ p.campo.numero }} {{ p.campo.tipologia }}<br>
+                                    <strong>Username cliente: </strong>{{ p.cliente.user.username }}
+                                </p>
+                                <small><strong>ID prenotazione: </strong>{{ p.id }}</small>
+                            </li>
+                        {% empty %}
+                            <h5 class="py-4 mt-4 text-center">Nessuna prenotazione futura effettuata dai clienti...</h5>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </section>

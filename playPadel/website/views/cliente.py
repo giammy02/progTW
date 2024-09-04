@@ -34,14 +34,14 @@ def dashboardCliente(request):
         lista_giocatori = p.giocatori.split(', ')
         risultato = p.risultato.split(', ')
         nome_impianto = p.prenotazione.impianto.nome
-        id_campo = p.prenotazione.campo_id
+        num_campo = p.prenotazione.campo.numero
         dati_partita.append({
             'data': data,
             'ora': ora,
             'giocatori': lista_giocatori,
             'risultato': risultato,
             'nome_impianto': nome_impianto,
-            'id_campo': id_campo
+            'num_campo': num_campo
         })
     context = {
         'user': user,
@@ -65,7 +65,7 @@ def prenotazioniCliente(request):
         ora_inizio = pren.ora_inizio
         ora_fine = pren.ora_fine
         nome_impianto = pren.impianto.nome
-        id_campo = pren.campo_id
+        num_campo = pren.campo.numero
         if pren.data < today:
             stato = "Passato"
         elif pren.data >= today:
@@ -77,8 +77,7 @@ def prenotazioniCliente(request):
             'ora_inizio': ora_inizio,
             'ora_fine': ora_fine,
             'nome_impianto': nome_impianto,
-            'id_campo': id_campo,
-            'today': today
+            'num_campo': num_campo
         })
     context = {
         'user': user,
@@ -92,7 +91,7 @@ def prenotazioniCliente(request):
 
 @login_required
 def modificaCliente(request):
-    user = request.user
+    utente = request.user
     pre_url = request.META.get('HTTP_REFERER')
     d_url = request.build_absolute_uri('/cliente/dashboard/')
 
@@ -122,7 +121,7 @@ def modificaCliente(request):
         user_form = UserForm(instance=request.user)
 
     context = {
-        'user': user,
+        'user': utente,
         'pre_url': pre_url,
         'dashboard_url': d_url,
         'cliente_form': cliente_form,

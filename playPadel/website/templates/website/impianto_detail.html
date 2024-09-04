@@ -129,7 +129,7 @@
                     {% for i in campo %}
                         <div class="card bg-transparent my-2" style="border: 1px solid #ddd;">
                             <a class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
-                                <span class="title" style="font-size: 17px; color: #000">Campo {{ forloop.counter }} - {{ i.tipologia }}</span>
+                                <span class="title" style="font-size: 17px; color: #000">Campo {{ i.numero }} - {{ i.tipologia }}</span>
                                 <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-caret-down-fill"></i></span>
                             </a>
                             <div id="collapse{{ forloop.counter }}" class="collapse hidden" data-parent="#accordion">

@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.generic import CreateView
@@ -23,10 +25,18 @@ class GestoreSignUpView(CreateView):
 def dashboardGestore(request):
     user = request.user
     impianto = Impianto.objects.filter(gestore_id=user.pk).first()
-
+    news = News.objects.filter(impianto_id=impianto.pk)
+    prenotazione = Prenotazione.objects.filter(impianto_id=impianto.pk)
+    today = datetime.now().date()
+    prenotazioni_clienti = []
+    for p in prenotazione:
+        if p.data >= today:
+            prenotazioni_clienti.append(p)
     context = {
         'user': user,
         'impianto': impianto,
+        'news': news,
+        'prenotazioni_clienti': prenotazioni_clienti
     }
     return render(request, 'gestore/dashboard_gestore.html', context)
 
@@ -34,7 +44,7 @@ def dashboardGestore(request):
 def modificaGestore(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
-    d_url = request.build_absolute_uri('/cliente/dashboard/')
+    d_url = request.build_absolute_uri('/gestore/dashboard/')
     context = {
         'user': user,
         'pre_url': pre_url,
@@ -46,7 +56,7 @@ def modificaGestore(request):
 def modificaImpianto(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
-    d_url = request.build_absolute_uri('/cliente/dashboard/')
+    d_url = request.build_absolute_uri('/gestore/dashboard/')
     context = {
         'user': user,
         'pre_url': pre_url,

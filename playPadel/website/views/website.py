@@ -105,12 +105,14 @@ class Prenota(ListView):
     model = Impianto
     template_name = "website/prenota.html"
 
+    '''
     def get_queryset(self):
         query = self.request.GET.get("q")
         object_list = Impianto.objects.filter(
             Q(nome__icontains=query) | Q(caratteristiche__icontains=query)
         )
         return object_list
+    '''
 
 
 def conferma_prenotazione(request, slug):

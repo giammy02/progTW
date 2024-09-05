@@ -1,7 +1,6 @@
 from django.utils import timezone
 
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.contrib.auth.models import AbstractUser
 
 
@@ -11,8 +10,7 @@ class Users(AbstractUser):
 
 class Cliente(models.Model):
     user = models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
-    eta = models.IntegerField(blank=False, null=False)
-    foto = models.ImageField(upload_to='profile_pics', blank=False, null=False, default='default_profile_pic.png')
+    foto = models.ImageField(upload_to='profile_pics', blank=True, null=False, default='default_profile_pic.png')
 
     class Meta:
         verbose_name_plural = 'Clienti'
@@ -20,7 +18,7 @@ class Cliente(models.Model):
 
 class Gestore(models.Model):
     user = models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
-    foto = models.ImageField(upload_to='profile_pics', blank=False, null=False, default='default_profile_pic.png')
+    foto = models.ImageField(upload_to='profile_pics', blank=True, null=False, default='default_profile_pic.png')
 
     class Meta:
         verbose_name_plural = 'Gestori'
@@ -29,8 +27,8 @@ class Gestore(models.Model):
 class Impianto(models.Model):
     gestore = models.ForeignKey(Gestore, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, blank=False, null=False)
-    slug = models.SlugField(null=False, unique=True, default=slugify(nome))
-    foto = models.ImageField(upload_to='media', blank=False, null=False, default='default_impianto_photo.jpg')
+    slug = models.SlugField(blank=False, null=False, unique=True)
+    foto = models.ImageField(upload_to='media', blank=True, null=False, default='default_impianto_photo.jpg')
     numero_campi = models.IntegerField(blank=False, null=False)
     posizione = models.CharField(max_length=255, blank=False, null=False)
     orari = models.CharField(max_length=255)

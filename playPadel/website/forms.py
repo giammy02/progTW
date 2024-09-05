@@ -1,32 +1,76 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import inlineformset_factory
 
 from .models import *
 
 
-class ClienteSignUpForm(UserCreationForm):
+# Form per username e password valido per entrambi i tipi di user
+class UserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Users
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.is_cliente = True
-        if commit:
-            user.save()
-        return user
 
+# Seconda colonna del form per nome, cognome ed email (valido per entrambi gli user)
+class Step2UserForm(forms.ModelForm):
+    first_name = forms.CharField(required=True, label="Nome")
+    last_name = forms.CharField(required=True, label="Cognome")
+    email = forms.EmailField(required=True, label="Email")
 
-class GestoreSignUpForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = Users
+        fields = ['first_name', 'last_name', 'email']
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.is_staff = True
-        if commit:
-            user.save()
-        return user
 
+# Form specifico per Cliente per impostare foto profilo
+class ClienteForm(forms.ModelForm):
+
+    class Meta:
+        model = Cliente
+        fields = ['foto']
+
+
+# Form specifico per Gestore per impostare foto profilo
+class GestoreForm(forms.ModelForm):
+
+    class Meta:
+        model = Gestore
+        fields = ['foto']
+
+
+# Form per la creazione di un nuovo impianto
+class ImpiantoForm(forms.ModelForm):
+
+    class Meta:
+        model = Impianto
+        fields = ['nome', 'foto', 'numero_campi', 'posizione', 'orari', 'prezzi', 'contatti', 'caratteristiche']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'numero_campi': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'posizione': forms.TextInput(attrs={'class': 'form-control'}),
+            'orari': forms.TextInput(attrs={'class': 'form-control', 'label': 'Costo orario'}),
+            'prezzi': forms.TextInput(attrs={'class': 'form-control'}),
+            'contatti': forms.TextInput(attrs={'class': 'form-control'}),
+            'caratteristiche': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+
+class CampoForm(forms.ModelForm):
+    TIPI_CAMPO = [
+        ('Indoor', 'Indoor'),
+        ('Outdoor', 'Outdoor'),
+    ]
+
+    tipologia = forms.ChoiceField(choices=TIPI_CAMPO, widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Campo
+        fields = ['numero', 'tipologia']
+
+    def __init__(self, *args, **kwargs):
+        super(CampoForm, self).__init__(*args, **kwargs)
+        self.fields['numero'].widget.attrs['readonly'] = True
 
 class EditClienteForm(forms.ModelForm):
     old_password = forms.CharField(
@@ -47,10 +91,9 @@ class EditClienteForm(forms.ModelForm):
 
     class Meta:
         model = Cliente
-        fields = ['user', 'eta', 'foto']
+        fields = ['user', 'foto']
         widgets = {
             'user': forms.TextInput(attrs={'class': 'form-control'}),
-            'eta': forms.NumberInput(attrs={'class': 'form-control'}),
             'foto': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
         }
 
@@ -81,19 +124,17 @@ class UserForm(forms.ModelForm):
 
 
 class PrenotazioneForm(forms.ModelForm):
-
     class Meta:
         model = Prenotazione
         fields = ['data']
         widgets = {'data': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date',
-            }),
+            'class': 'form-control',
+            'type': 'date',
+        }),
         }
 
 
 class CercaDisponibilita(forms.ModelForm):
-
     class Meta:
         model = Prenotazione
         fields = ['data']

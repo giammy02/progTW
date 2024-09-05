@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Form</title>
-</head>
-<body>
-    Bella li
-</body>
-</html>
+{% extends "PlayPadel/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block title %} PlayPadel - Registrati {% endblock %}
+
+{% block content %}
+
+    <section class="section py-4" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-left">
+                    <a href="{% url 'registrati' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna indietro">
+                        <i class="bi bi-arrow-left mr-2"></i>Torna indietro
+                    </a>
+                </div>
+                <div class="col-md-8 text-center">
+                    <h2>Registrati come <strong>{{ user_type }}</strong></h2>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mt-4">
+                    <div class="col border-right border-dark">
+                        {{ user_form|crispy }}
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{ user_form2.first_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ user_form2.last_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ user_form2.email|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ user_form3.foto|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                {% if user_type == 'cliente' %}
+                    <div class="col mt-4">
+                        <button type="submit" class="btn btn-success">Registrati</button>
+                    </div>
+                {% else %}
+                        <div class="alert alert-warning mt-3" role="alert">
+                            <strong>Attenzione! </strong>Una volta creato l'utente è necessario <strong>accedere</strong> e proseguire anche con la creazione dell'impianto!
+                        </div>
+                        <button type="submit" class="btn btn-primary">Continua</button>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

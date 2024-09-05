@@ -28,11 +28,8 @@
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-8 text-left">
+                        <div class="col-md-12 text-left">
                             <strong>Nome & Cognome: </strong>{{ user.first_name }} {{ user.last_name }}
-                        </div>
-                        <div class="col-md-4 text-left">
-                            <strong>Età: </strong> {{ user.cliente.eta }}
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -62,22 +59,30 @@
                     <div class="row mt-2">
                         <strong>Ultima prenotazione: </strong>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12 text-left">
-                            <i class="bi bi-geo-alt mr-1"></i>
-                            {{ prenotazioni.last.impianto.nome }} - Campo {{ prenotazioni.last.campo.id }} {{ prenotazioni.last.campo.tipologia }}
+                    {% if prenotazioni %}
+                        <div class="row mt-2">
+                            <div class="col-md-12 text-left">
+                                <i class="bi bi-geo-alt mr-1"></i>
+                                {{ prenotazioni.last.impianto.nome }} - Campo {{ prenotazioni.last.campo.id }} {{ prenotazioni.last.campo.tipologia }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6 text-left">
-                            <i class="bi bi-calendar mr-1"></i>
-                            {{ prenotazioni.last.data }}
+                        <div class="row mt-2">
+                            <div class="col-md-6 text-left">
+                                <i class="bi bi-calendar mr-1"></i>
+                                {{ prenotazioni.last.data }}
+                            </div>
+                            <div class="col-md-6 text-left">
+                                <i class="bi bi-clock mr-1"></i>
+                                {{ prenotazioni.last.ora_inizio }} - {{ prenotazioni.last.ora_fine }}
+                            </div>
                         </div>
-                        <div class="col-md-6 text-left">
-                            <i class="bi bi-clock mr-1"></i>
-                            {{ prenotazioni.last.ora_inizio }} - {{ prenotazioni.last.ora_fine }}
+                    {% else %}
+                        <div class="row mt-2">
+                            <div class="col-md-12 text-left">
+                                Ancora nessuna prenotazione...
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-6">
                     <div class="row ml-2">

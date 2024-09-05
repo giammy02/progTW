@@ -1,0 +1,94 @@
+{% extends "playPadel/base.html" %}
+
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block title %} PlayPadel - Modifica dati {% endblock %}
+
+{% block content %}
+
+    <section class="section py-1" style="min-height: 83vh;">
+        <div class="container bg-white text-black text text-center py-5">
+            <div class="col-md-12 text-center">
+                <h2>Crea Impianto</h2>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h4>Dati Impianto</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nome">Nome Impianto*</label>
+                                    {{ impianto_form.nome }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ impianto_form.posizione|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prezzi">Costo all'ora*</label>
+                                    {{ impianto_form.prezzi }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ impianto_form.orari|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ impianto_form.contatti|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ impianto_form.numero_campi|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ impianto_form.caratteristiche|as_crispy_field }}
+                        <div class="form-group mt-3">
+                            {{ impianto_form.foto|as_crispy_field }}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4>Campi</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ campo_formset.management_form }}
+                        {% for form in campo_formset %}
+                            <div class="form-row mb-2">
+                                <div class="form-group col-md-6">
+                                    {{ form.numero|as_crispy_field }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    {{ form.tipologia|as_crispy_field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Crea Impianto</button>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

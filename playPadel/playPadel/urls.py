@@ -23,7 +23,7 @@ urlpatterns = [
     path('accounts/login/', website.MyLoginView.as_view(), name='login'),
     path('accounts/logout/', website.logout_request, name='logout'),
     path('accounts/signup/', website.SignUpView.as_view(), name='registrati'),
-    path('accounts/signup/cliente/', cliente.ClienteSignUpView.as_view(), name='registra_cliente'),
-    path('accounts/signup/gestore/', gestore.GestoreSignUpView.as_view(), name='registra_gestore'),
+    path('accounts/signup/cliente/', cliente.registrazione_cliente, name='registra_cliente'),
+    path('accounts/signup/gestore/', gestore.registrazione_gestore, name='registra_gestore'),
     path('admin/', admin.site.urls),
 ]

@@ -7,7 +7,7 @@
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
-                {% if pre_url == dashboard_url %}
+                {% if pre_url == dashboard_url or pre_url == modifica_url %}
                     <div class="col-md-2 text-left">
                         <a href="{% url 'website:gestore:dashboard_gestore' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla dashboard">
                             <i class="bi bi-arrow-left mr-2"></i>Dashboard

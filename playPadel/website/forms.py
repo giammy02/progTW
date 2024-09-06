@@ -29,16 +29,16 @@ class ImpiantoForm(forms.ModelForm):
 
     class Meta:
         model = Impianto
-        fields = ['nome', 'foto', 'numero_campi', 'posizione', 'orari', 'prezzi', 'contatti', 'caratteristiche']
+        fields = ['nome', 'posizione', 'orari', 'prezzi', 'contatti', 'caratteristiche', 'numero_campi', 'foto']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
-            'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
-            'numero_campi': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'posizione': forms.TextInput(attrs={'class': 'form-control'}),
             'orari': forms.TextInput(attrs={'class': 'form-control', 'label': 'Costo orario'}),
             'prezzi': forms.TextInput(attrs={'class': 'form-control'}),
             'contatti': forms.TextInput(attrs={'class': 'form-control'}),
-            'caratteristiche': forms.TextInput(attrs={'class': 'form-control'})
+            'caratteristiche': forms.TextInput(attrs={'class': 'form-control'}),
+            'numero_campi': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
         }
 
 
@@ -53,10 +53,6 @@ class CampoForm(forms.ModelForm):
     class Meta:
         model = Campo
         fields = ['numero', 'tipologia']
-
-    def __init__(self, *args, **kwargs):
-        super(CampoForm, self).__init__(*args, **kwargs)
-        self.fields['numero'].widget.attrs['readonly'] = True
 
 
 class EditUserForm(forms.ModelForm):
@@ -100,7 +96,7 @@ class EditUserForm(forms.ModelForm):
 
         return cleaned_data
 
-    # Salvataggio immagine di default se form 'foto' viene svuotato
+    # Salvataggio immagine di default se form 'foto' viene svuotato per prevenire campo vuoto nel DB
     def save(self, commit=True):
         instance = super(EditUserForm, self).save(commit=False)
 

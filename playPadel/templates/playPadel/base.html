@@ -38,7 +38,7 @@
                                 {% if user.is_staff %}
                                     <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Dashboard & Impianto</a>
                                     <a href="{% url 'website:gestore:modifica_gestore' %}" class="dropdown-item">Modifica dati</a>
-                                    <a href="{% url 'website:gestore:modifica_impianto_gestore' %}" class="dropdown-item">Modifica impianto</a>
+                                    <a href="{% url 'website:gestore:dashboard_gestore' %}" class="dropdown-item">Prenotazioni clienti</a>
                                 {% else %}
                                     <a href="{% url 'website:cliente:dashboard_cliente' %}" class="dropdown-item">Dashboard & Storico</a>
                                     <a href="{% url 'website:cliente:modifica_cliente' %}" class="dropdown-item">Modifica dati</a>

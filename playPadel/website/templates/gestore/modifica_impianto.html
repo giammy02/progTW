@@ -1,6 +1,9 @@
 {% extends "playPadel/base.html" %}
 
-{% block title %} PlayPadel - Modifica dati {% endblock %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+
+{% block title %} PlayPadel - Modifica impianto {% endblock %}
 
 {% block content %}
 
@@ -21,6 +24,70 @@
                 </div>
                 <div class="col-md-2"></div>
             </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ impianto_form.nome|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ impianto_form.posizione|as_crispy_field }}
+                        </div>
+                </div>
+                <div class="row">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ impianto_form.orari|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="prezzi">Costo all'ora*</label>
+                            {{ impianto_form.prezzi }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ impianto_form.contatti|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ impianto_form.numero_campi|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ impianto_form.caratteristiche|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ impianto_form.foto|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3 class="mb-3">Modifica campi</h3>
+                {{ campo_formset.management_form }}
+                {% for form in campo_formset %}
+                    <div class="form-row form-inline justify-content-between">
+                        {{ form.as_p }}
+                    </div>
+                    <hr class="hr" />
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+            </form>
         </div>
     </section>
 

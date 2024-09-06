@@ -26,6 +26,7 @@ urlpatterns = [
         path('dashboard/', gestore.dashboardGestore, name='dashboard_gestore'),
         path('modifica/', website.modificaUser, name='modifica_gestore'),
         path('registra_impianto/', gestore.crea_impianto, name='crea_impianto_gestore'),
-        path('modifica_impianto/', gestore.modificaImpianto, name='modifica_impianto_gestore'),
+        path('modifica_impianto/<slug:slug>', gestore.modificaImpianto, name='modifica_impianto_gestore'),
+        path('prenotazioni/', gestore.prenotazioniGestore, name='prenotazioni_gestore'),
     ], 'gestore'), namespace='gestore')),
 ]

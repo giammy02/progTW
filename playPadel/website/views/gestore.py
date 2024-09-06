@@ -7,48 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 
-from ..forms import UserSignUpForm, Step2UserForm, GestoreForm, ImpiantoForm, CampoForm
+from ..forms import ImpiantoForm, CampoForm
 from ..models import *
 
-
-def registrazione_gestore(request):
-    user_type = 'gestore'
-
-    if request.method == 'POST':
-        user_form = UserSignUpForm(request.POST)
-        user_form2 = Step2UserForm(request.POST)
-        gestore_form = GestoreForm(request.POST, request.FILES)
-
-        if user_form.is_valid() and user_form2.is_valid() and gestore_form.is_valid():
-            # Salva l'utente
-            user = user_form.save(commit=False)
-            user.is_staff = True
-            user.save()
-
-            user.first_name = user_form2.cleaned_data['first_name']
-            user.last_name = user_form2.cleaned_data['last_name']
-            user.email = user_form2.cleaned_data['email']
-            user.save()
-
-            gestore = gestore_form.save(commit=False)
-            gestore.user = user
-            gestore.save()
-
-            messages.info(request, "Registrazione avvenuta! Proseguire con il login per creare l'impianto")
-            return redirect('website:gestore:crea_impianto_gestore')
-        else:
-            messages.error(request, 'Si è verificato un errore durante la fase di registrazione!')
-    else:
-        user_form = UserSignUpForm()
-        user_form2 = Step2UserForm()
-        gestore_form = GestoreForm()
-
-    return render(request, 'registration/signup_form.html', {
-        'user_type': user_type,
-        'user_form': user_form,
-        'user_form2': user_form2,
-        'user_form3': gestore_form
-    })
 
 @login_required
 def crea_impianto(request):
@@ -135,21 +96,6 @@ def dashboardGestore(request):
         'prenotazioni_clienti': prenotazioni_clienti
     }
     return render(request, 'gestore/dashboard_gestore.html', context)
-
-
-def modificaGestore(request):
-    user = request.user
-    pre_url = request.META.get('HTTP_REFERER')
-    d_url = request.build_absolute_uri('/gestore/dashboard/')
-    m_url = request.build_absolute_uri('/gestore/modifica/')
-
-    context = {
-        'user': user,
-        'pre_url': pre_url,
-        'dashboard_url': d_url,
-        'modifica_url': m_url
-    }
-    return render(request, 'gestore/modifica_gestore.html', context)
 
 
 def modificaImpianto(request):

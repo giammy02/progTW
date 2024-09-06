@@ -5,30 +5,17 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Users(AbstractUser):
-    is_cliente = models.BooleanField('cliente status', default=True)
-
-
-class Cliente(models.Model):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
-    foto = models.ImageField(upload_to='profile_pics', blank=True, null=False, default='default_profile_pic.png')
+    foto = models.ImageField(upload_to='profile_pics', blank=True, null=False, default='profile_pics/default_profile_pic.png')
 
     class Meta:
-        verbose_name_plural = 'Clienti'
-
-
-class Gestore(models.Model):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE, primary_key=True)
-    foto = models.ImageField(upload_to='profile_pics', blank=True, null=False, default='default_profile_pic.png')
-
-    class Meta:
-        verbose_name_plural = 'Gestori'
+        verbose_name_plural = 'Utenti'
 
 
 class Impianto(models.Model):
-    gestore = models.ForeignKey(Gestore, on_delete=models.CASCADE)
+    gestore = models.ForeignKey(Users, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, blank=False, null=False)
     slug = models.SlugField(blank=False, null=False, unique=True)
-    foto = models.ImageField(upload_to='media', blank=True, null=False, default='default_impianto_photo.jpg')
+    foto = models.ImageField(upload_to='media', blank=True, null=False, default='media/default_impianto_photo.jpg')
     numero_campi = models.IntegerField(blank=False, null=False)
     posizione = models.CharField(max_length=255, blank=False, null=False)
     orari = models.CharField(max_length=255)
@@ -50,7 +37,7 @@ class Campo(models.Model):
 
 
 class Prenotazione(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Users, on_delete=models.CASCADE)
     campo = models.ForeignKey(Campo, on_delete=models.CASCADE)
     impianto = models.ForeignKey(Impianto, on_delete=models.CASCADE)
     data = models.DateField(blank=False, null=False, verbose_name='')
@@ -63,7 +50,7 @@ class Prenotazione(models.Model):
 
 class Partita(models.Model):
     prenotazione = models.ForeignKey(Prenotazione, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Users, on_delete=models.CASCADE)
     risultato = models.CharField(max_length=50)
     giocatori = models.CharField(max_length=255)
 
@@ -72,7 +59,7 @@ class Partita(models.Model):
 
 
 class News(models.Model):
-    gestore = models.ForeignKey(Gestore, on_delete=models.CASCADE)
+    gestore = models.ForeignKey(Users, on_delete=models.CASCADE)
     impianto = models.ForeignKey(Impianto, on_delete=models.CASCADE)
     titolo = models.CharField(max_length=255)
     descrizione = models.CharField(max_length=501)

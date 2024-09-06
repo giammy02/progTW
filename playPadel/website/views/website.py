@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
@@ -8,7 +9,11 @@ from django.views.generic import DetailView, TemplateView
 from django.db.models import Q
 
 from ..models import *
-from ..forms import PrenotazioneForm
+from ..forms import PrenotazioneForm, UserSignUpForm, Step2UserForm, EditUserForm
+
+
+def homepage(request):
+    return render(request, 'website/homepage.html')
 
 
 class MyLoginView(LoginView):
@@ -33,8 +38,101 @@ class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
 
-def homepage(request):
-    return render(request, 'website/homepage.html')
+def registrazione_utente(request):
+    if request.user.is_staff:
+        user_type = 'gestore'
+    else:
+        user_type = 'cliente'
+
+    if request.method == 'POST':
+        user_form = UserSignUpForm(request.POST)
+        user_form2 = Step2UserForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and user_form2.is_valid():
+            # Salva l'utente
+            user = user_form.save(commit=False)
+            user.is_cliente = True
+            user.save()
+
+            user.first_name = user_form2.cleaned_data['first_name']
+            user.last_name = user_form2.cleaned_data['last_name']
+            user.email = user_form2.cleaned_data['email']
+            user.save()
+
+            messages.success(request, 'Registrazione completata con successo!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Si è verificato un errore durante la fase di registrazione!')
+    else:
+        user_form = UserSignUpForm()
+        user_form2 = Step2UserForm()
+
+    return render(request, 'registration/signup_form.html', {
+        'user_type': user_type,
+        'user_form': user_form,
+        'user_form2': user_form2
+    })
+
+
+@login_required
+def modificaUser(request):
+    if request.user.is_staff:
+        user_type = 'gestore'
+    else:
+        user_type = 'cliente'
+    username = request.user.username
+    pre_url = request.META.get('HTTP_REFERER')
+    d_url = request.build_absolute_uri('/'+user_type+'/dashboard/')
+    m_url = request.build_absolute_uri('/'+user_type+'cliente/modifica/')
+
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST, request.FILES, instance=request.user)
+
+        old_password = request.POST.get('old_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        if user_form.is_valid():
+            # Verifica della vecchia password
+            if old_password and authenticate(username=username, password=old_password):
+                # Verifica se sono stati inseriti nuovi campi password
+                if new_password1 and new_password2:
+                    if new_password1 == new_password2:
+                        user = user_form.save(commit=False)
+                        if not user_form.cleaned_data['foto']:
+                            user.foto = 'profile_pics/default_profile_pic.png'
+                        user.set_password(new_password1)  # Imposta la nuova password
+                        user.save()
+
+                        update_session_auth_hash(request, user)  # Mantiene l'utente loggato dopo il cambio password
+                        messages.success(request, 'Profilo e password aggiornati correttamente.')
+                        return redirect('website:'+user_type+':dashboard_'+user_type)
+                    else:
+                        messages.error(request, 'Le nuove password non coincidono.')
+                else:
+                    # Salva i dati dell'utente senza cambiare la password
+                    user = user_form.save(commit=False)
+                    if not user_form.cleaned_data['foto']:
+                        user.foto = 'profile_pics/default_profile_pic.png'
+                    user.save()
+                    messages.success(request, 'Profilo aggiornato correttamente.')
+                    return redirect('website:'+user_type+':dashboard_'+user_type)
+            else:
+                messages.error(request, 'La vecchia password non è corretta.')
+        else:
+            messages.error(request, 'Si è verificato un errore. Controlla i dati inseriti.')
+    else:
+        user_form = EditUserForm(instance=request.user)
+
+    context = {
+        'user_type': user_type,
+        'pre_url': pre_url,
+        'dashboard_url': d_url,
+        'modifica_url': m_url,
+        'user_form': user_form
+    }
+
+    return render(request, 'website/modifica_user.html', context)
 
 
 class ImpiantiList(ListView):

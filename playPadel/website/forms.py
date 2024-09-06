@@ -1,17 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import inlineformset_factory
 
 from .models import *
 
 
-# Form per username e password valido per entrambi i tipi di user
+# Form per username e password
 class UserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Users
 
 
-# Seconda colonna del form per nome, cognome ed email (valido per entrambi gli user)
+# Seconda colonna del form per nome, cognome ed email
 class Step2UserForm(forms.ModelForm):
     first_name = forms.CharField(required=True, label="Nome")
     last_name = forms.CharField(required=True, label="Cognome")
@@ -19,23 +18,10 @@ class Step2UserForm(forms.ModelForm):
 
     class Meta:
         model = Users
-        fields = ['first_name', 'last_name', 'email']
-
-
-# Form specifico per Cliente per impostare foto profilo
-class ClienteForm(forms.ModelForm):
-
-    class Meta:
-        model = Cliente
-        fields = ['foto']
-
-
-# Form specifico per Gestore per impostare foto profilo
-class GestoreForm(forms.ModelForm):
-
-    class Meta:
-        model = Gestore
-        fields = ['foto']
+        fields = ['first_name', 'last_name', 'email', 'foto']
+        widgets = {
+            'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
+        }
 
 
 # Form per la creazione di un nuovo impianto
@@ -72,7 +58,8 @@ class CampoForm(forms.ModelForm):
         super(CampoForm, self).__init__(*args, **kwargs)
         self.fields['numero'].widget.attrs['readonly'] = True
 
-class EditClienteForm(forms.ModelForm):
+
+class EditUserForm(forms.ModelForm):
     old_password = forms.CharField(
         label="Vecchia Password",
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -90,11 +77,14 @@ class EditClienteForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Cliente
-        fields = ['user', 'foto']
+        model = Users
+        fields = ['username', 'first_name', 'last_name', 'email', 'foto']
         widgets = {
-            'user': forms.TextInput(attrs={'class': 'form-control'}),
-            'foto': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'foto': forms.ClearableFileInput(attrs={'class': 'form-control-file'})
         }
 
     # Validazione personalizzata per le password
@@ -110,17 +100,17 @@ class EditClienteForm(forms.ModelForm):
 
         return cleaned_data
 
+    # Salvataggio immagine di default se form 'foto' viene svuotato
+    def save(self, commit=True):
+        instance = super(EditUserForm, self).save(commit=False)
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = Users
-        fields = ['username', 'first_name', 'last_name', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-        }
+        if not self.cleaned_data['foto']:
+            instance.foto = 'profile_pics/default_profile_pic.png'
+
+        if commit:
+            instance.save()
+
+        return instance
 
 
 class PrenotazioneForm(forms.ModelForm):

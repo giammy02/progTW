@@ -127,10 +127,10 @@
                     </ul>
                     <div class="tab-content mt-4" id="myTabContent">
                         <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <img src="{% static 'img/profile_pics' %}/{{ user.gestore.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto gestore">
+                            <img src="{% static 'img' %}/{{ user.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto gestore">
                         </div>
                         <div class="tab-pane fade" id="impianto" role="tabpanel" aria-labelledby="impianto-tab">
-                            <img src="{% static 'img/media' %}/{{ impianto.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto impianto">
+                            <img src="{% static 'img' %}/{{ impianto.foto }}" class="img-fluid" style="max-height: 250px" alt="Foto impianto">
                         </div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                                 </div>
                                 <p class="mb-1 text-left">
                                     <strong>Impianto: </strong>{{ p.impianto.nome }} - Campo {{ p.campo.numero }} {{ p.campo.tipologia }}<br>
-                                    <strong>Username cliente: </strong>{{ p.cliente.user.username }}
+                                    <strong>Username cliente: </strong>{{ p.cliente.username }}
                                 </p>
                                 <small><strong>ID prenotazione: </strong>{{ p.id }}</small>
                             </li>

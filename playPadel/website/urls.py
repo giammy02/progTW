@@ -17,16 +17,14 @@ urlpatterns = [
     ], 'website'), namespace='website')),
 
     path('cliente/', include(([
-        path('registrati/', cliente.registrazione_cliente, name='registra_cliente'),
         path('dashboard/', cliente.dashboardCliente, name='dashboard_cliente'),
         path('prenotazioni/', cliente.prenotazioniCliente, name='prenotazioni_cliente'),
-        path('modifica/', cliente.modificaCliente, name='modifica_cliente'),
+        path('modifica/', website.modificaUser, name='modifica_cliente'),
     ], 'cliente'), namespace='cliente')),
 
     path('gestore/', include(([
-        path('registrati/', gestore.registrazione_gestore, name='registra_gestore'),
         path('dashboard/', gestore.dashboardGestore, name='dashboard_gestore'),
-        path('modifica/', gestore.modificaGestore, name='modifica_gestore'),
+        path('modifica/', website.modificaUser, name='modifica_gestore'),
         path('registra_impianto/', gestore.crea_impianto, name='crea_impianto_gestore'),
         path('modifica_impianto/', gestore.modificaImpianto, name='modifica_impianto_gestore'),
     ], 'gestore'), namespace='gestore')),

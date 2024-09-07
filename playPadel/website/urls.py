@@ -8,6 +8,7 @@ app_name = 'website'
 urlpatterns = [
     path('', website.homepage, name='homepage'),
     path('prenota/', website.Prenota.as_view(), name='prenota'),
+    path('cancella_prenotazione/<pk>/', website.delete_prenotazione),
 
     path('impianti/', include(([
         path('', website.ImpiantiList.as_view(), name='impianti'),

@@ -41,6 +41,7 @@ def prenotazioniCliente(request):
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
     pre_url = request.META.get('HTTP_REFERER')
     d_url = request.build_absolute_uri('/cliente/dashboard/')
+    p_url = request.build_absolute_uri('/cliente/prenotazioni/')
     today = datetime.now().date()
     dati_prenotazione = []
     for pren in prenotazione:
@@ -68,6 +69,7 @@ def prenotazioniCliente(request):
         'prenotazione': prenotazione,
         'dati_prenotazione': dati_prenotazione,
         'pre_url': pre_url,
-        'dashboard_url': d_url
+        'dashboard_url': d_url,
+        'prenotazioni_url': p_url
     }
     return render(request, 'cliente/prenotazioni_cliente.html', context)

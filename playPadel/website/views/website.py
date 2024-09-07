@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
-from django.views.generic import DetailView, TemplateView
+from django.views.generic import DetailView, TemplateView, DeleteView
 from django.db.models import Q
 
 from ..models import *
@@ -226,3 +226,11 @@ def conferma_prenotazione(request, slug):
         'slug': slug,
         'impianto': impianto
     })
+
+
+def delete_prenotazione(request, pk):
+    post = Prenotazione.objects.get(pk=pk)
+    pre_url = request.META.get('HTTP_REFERER')
+    post.delete()
+    messages.success(request, "Prenotazione cancellata!")
+    return redirect(pre_url)

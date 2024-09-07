@@ -4,30 +4,10 @@
 
 {% block content %}
 
-    <div class="modal fade" id="ModalConferma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Stai per eliminare questa prenotazione! Sei sicuro di voler continuare?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-                    <a href="{% url 'website:homepage' %}" role="button" class="btn btn-primary">Conferma</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <section class="section py-1" style="min-height: 83vh;">
         <div class="container bg-white text-black text text-center py-5">
             <div class="row align-items-center">
-                {% if pre_url == dashboard_url %}
+                {% if pre_url == dashboard_url or pre_url == prenotazioni_url %}
                     <div class="col-md-2 text-left">
                         <a href="{% url 'website:cliente:dashboard_cliente' %}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="top" title="Torna alla dashboard">
                             <i class="bi bi-arrow-left mr-2"></i>Dashboard
@@ -65,14 +45,38 @@
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
                                             {% if p.stato == 'Attivo' %}
-                                                <a href="{% url 'website:homepage' %}" class="btn btn-outline-danger btn-sm " role="button" data-toggle="tooltip" data-placement="top" title="Cancella prenotazione">
+                                                <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" title="Cancella prenotazione" data-target="#ModalConferma1-{{ p.pren_id }}">
                                                     <i class="bi bi-trash"></i>
-                                                </a>
+                                                </button>
                                             {% endif %}
                                         </div>
                                         <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.num_campo }}</p>
                                         <small><strong>ID prenotazione: </strong>{{ p.pren_id }}</small>
                                     </li>
+
+                                    <!-- MODAL CONFERMA ELIMINAZIONE PRENOTAZIONE -->
+                                        <div class="modal fade" id="ModalConferma1-{{ p.pren_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body text-left">
+                                                        <strong>Stai per eliminare questa prenotazione!</strong><br>Sei sicuro di voler continuare?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                                        <form method="POST" id="{{ p.pren_id }}"  action="/cancella_prenotazione/{{ p.pren_id }}/">
+                                                            {%csrf_token%}
+                                                            <button type="submit" class="btn btn-primary" id="{{ p.pren_id }}">Continua</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                 {% empty %}
                                     <h5 class="py-4 mt-4">Ancora nessuna prenotazione...</h5>
                                 {% endfor %}
@@ -86,7 +90,7 @@
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
                                                 {% if p.stato == 'Attivo' %}
-                                                    <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" title="Cancella prenotazione" data-target="#ModalConferma">
+                                                    <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" title="Cancella prenotazione" data-target="#ModalConferma2-{{ p.pren_id }}">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 {% endif %}
@@ -94,6 +98,30 @@
                                             <p class="mb-1 text-left"><strong>Impianto: </strong>{{ p.nome_impianto }} - Campo {{ p.num_campo }}</p>
                                             <small><strong>ID prenotazione: </strong>{{ p.pren_id }}</small>
                                         </li>
+
+                                        <!-- MODAL CONFERMA ELIMINAZIONE PRENOTAZIONE -->
+                                        <div class="modal fade" id="ModalConferma2-{{ p.pren_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body text-left">
+                                                        <strong>Stai per eliminare questa prenotazione!</strong><br>Sei sicuro di voler continuare?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                                        <form method="POST" id="{{ p.pren_id }}"  action="/cancella_prenotazione/{{ p.pren_id }}/">
+                                                            {%csrf_token%}
+                                                            <button type="submit" class="btn btn-primary" id="{{ p.pren_id }}">Continua</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 {% empty %}
                                     <h5 class="py-4 mt-4">Ancora nessuna prenotazione...</h5>

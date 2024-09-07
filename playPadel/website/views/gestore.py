@@ -145,6 +145,7 @@ def prenotazioniGestore(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
     d_url = request.build_absolute_uri('/gestore/dashboard/')
+    p_url = request.build_absolute_uri('/gestore/prenotazioni/')
     impianto = Impianto.objects.filter(gestore_id=user.pk).first()
     prenotazione = Prenotazione.objects.filter(impianto_id=impianto.pk)
     today = datetime.now().date()
@@ -157,6 +158,7 @@ def prenotazioniGestore(request):
         'user': user,
         'pre_url': pre_url,
         'dashboard_url': d_url,
+        'prenotazioni_url': p_url,
         'impianto': impianto,
         'prenotazioni_clienti': prenotazioni_clienti
     }

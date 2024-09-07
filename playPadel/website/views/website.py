@@ -39,9 +39,9 @@ class SignUpView(TemplateView):
 
 
 def registrazione_utente(request):
-    if request.user.is_staff:
+    if request.path == '/accounts/signup/gestore/':
         user_type = 'gestore'
-    else:
+    elif request.path == '/accounts/signup/cliente/':
         user_type = 'cliente'
 
     if request.method == 'POST':
@@ -51,27 +51,34 @@ def registrazione_utente(request):
         if user_form.is_valid() and user_form2.is_valid():
             # Salva l'utente
             user = user_form.save(commit=False)
-            user.is_cliente = True
-            user.save()
+            if user_type == 'gestore':
+                user.is_staff = True
 
             user.first_name = user_form2.cleaned_data['first_name']
             user.last_name = user_form2.cleaned_data['last_name']
             user.email = user_form2.cleaned_data['email']
+            user.foto = user_form2.cleaned_data['foto']
             user.save()
 
-            messages.success(request, 'Registrazione completata con successo!')
-            return redirect('login')
+            if user_type == 'gestore':
+                messages.info(request, "Registrazione avvenuta! Proseguire con il login per creare l'impianto")
+                return redirect('website:gestore:crea_impianto_gestore')
+            else:
+                messages.success(request, 'Registrazione completata con successo!')
+                return redirect('login')
         else:
             messages.error(request, 'Si è verificato un errore durante la fase di registrazione!')
     else:
         user_form = UserSignUpForm()
         user_form2 = Step2UserForm()
 
-    return render(request, 'registration/signup_form.html', {
+    context = {
         'user_type': user_type,
         'user_form': user_form,
         'user_form2': user_form2
-    })
+    }
+
+    return render(request, 'registration/signup_form.html', context)
 
 
 @login_required

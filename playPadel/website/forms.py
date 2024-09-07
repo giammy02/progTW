@@ -15,13 +15,11 @@ class Step2UserForm(forms.ModelForm):
     first_name = forms.CharField(required=True, label="Nome")
     last_name = forms.CharField(required=True, label="Cognome")
     email = forms.EmailField(required=True, label="Email")
+    foto = forms.FileInput(attrs={'class': 'form-control-file'})
 
     class Meta:
         model = Users
         fields = ['first_name', 'last_name', 'email', 'foto']
-        widgets = {
-            'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
-        }
 
 
 # Form per la creazione di un nuovo impianto

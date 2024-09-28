@@ -69,7 +69,7 @@
                     <i class="bi bi-newspaper mr-2" style="font-size: 1.5rem"></i>
                     <h2 class="mb-0">News dell'impianto</h2>
                 </div>
-                <div id="textCarousel" class="carousel slide" data-ride="carousel">
+                <div id="textCarousel" class="carousel slide" data-ride="carousel" style="min-height: 150px">
                     <div class="carousel-inner">
                         {% for n in news %}
                             {% if forloop.first %}
@@ -111,19 +111,11 @@
                     </div>
                     <div class="col-md-4 text-right form-inline mb-0">
                         <label for="selectDate" class="mr-2"><strong>Data prenotazione</strong></label>
-                        {{ form|crispy }}
+                        {{ form.data|as_crispy_field }}
                     </div>
-                    <div class="col-md-3 mb-0">
-                        <div class="form-inline float-right">
-                            <label for="selectDuration" class="mr-2"><strong>Durata</strong></label>
-                            <select class="custom-select form-control" id="selectDuration" style="min-width: 150px; min-height: 48px" required>
-                                <option value="" selected>Seleziona...</option>
-                                <option value="60">60 min.</option>
-                                <option value="90">90 min.</option>
-                                <option value="120">120 min.</option>
-                            </select>
-                            <div class="invalid-feedback">Selezionare un'opzione valida</div>
-                        </div>
+                    <div class="col-md-3 mb-0 form-inline d-flex justify-content-end">
+                        <label for="selectDuration" class="mr-2"><strong>Durata</strong></label>
+                        {{ form.durata|as_crispy_field }}
                     </div>
                 </div>
                 <div id="accordion">
@@ -194,6 +186,83 @@
             }
         });
     </script>
+
+    <!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#check-orari').click(function(){
+                var campoId = $('#id_campo').val();
+                var data = $('#id_data').val();
+                var durata = $('#id_durata').val();
+
+                if (campoId && data) {
+                    $.ajax({
+                        url: '',
+                        data: {
+                            'campo_id': campoId,
+                            'data': data
+                        },
+                        success: function(response) {
+                            $('.orario').each(function(){
+                                var hour = $(this).data('hour');
+                                var isAvailable = true;
+
+                                // Controlla se l'orario è prenotato
+                                $.each(response.orari_prenotati, function(index, prenotazione){
+                                    if (hour >= prenotazione.ora_inizio && hour < prenotazione.ora_fine) {
+                                        isAvailable = false;
+                                    }
+                                });
+
+                                if (!isAvailable) {
+                                    $(this).removeClass('btn-outline-primary').addClass('btn-danger').prop('disabled', true);
+                                } else {
+                                    $(this).removeClass('btn-danger').addClass('btn-outline-primary').prop('disabled', false);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    alert('Seleziona un campo e una data.');
+                }
+            });
+        });
+
+        success: function(response) {
+            var durata = parseInt($('#id_durata').val());
+
+            $('.orario').each(function(){
+                var hour = parseInt($(this).data('hour'));
+                var isAvailable = true;
+
+                // Controlla se l'orario è prenotato
+                $.each(response.orari_prenotati, function(index, prenotazione){
+                    var ora_inizio = parseInt(prenotazione.ora_inizio.split(':')[0]);
+                    var ora_fine = parseInt(prenotazione.ora_fine.split(':')[0]);
+
+                    if (hour >= ora_inizio && hour < ora_fine) {
+                        isAvailable = false;
+                    }
+                });
+
+                // Verifica se ci sono abbastanza ore disponibili per la durata
+                for (var i = 0; i < durata; i++) {
+                    if ($('.orario[data-hour="' + (hour + i) + ':00"]').prop('disabled') === true) {
+                        isAvailable = false;
+                        break;
+                    }
+                }
+
+                if (!isAvailable) {
+                    $(this).removeClass('btn-outline-primary').addClass('btn-danger').prop('disabled', true);
+                } else {
+                    $(this).removeClass('btn-danger').addClass('btn-outline-primary').prop('disabled', false);
+                }
+            });
+        }
+    </script>
+    -->
 
 {% endblock %}
 

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 
 from .models import *
 
@@ -29,12 +30,12 @@ class ImpiantoForm(forms.ModelForm):
         model = Impianto
         fields = ['nome', 'posizione', 'orari', 'prezzi', 'contatti', 'caratteristiche', 'numero_campi', 'foto']
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-control'}),
-            'posizione': forms.TextInput(attrs={'class': 'form-control'}),
-            'orari': forms.TextInput(attrs={'class': 'form-control', 'label': 'Costo orario'}),
-            'prezzi': forms.TextInput(attrs={'class': 'form-control'}),
-            'contatti': forms.TextInput(attrs={'class': 'form-control'}),
-            'caratteristiche': forms.TextInput(attrs={'class': 'form-control'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome impianto'}),
+            'posizione': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'es. Via Garibaldi 23, Roma'}),
+            'orari': forms.TextInput(attrs={'class': 'form-control', 'label': 'Costo orario', 'placeholder': 'es. 08:00 - 21:00'}),
+            'prezzi': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'es. 30'}),
+            'contatti': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'es. +39 9348082012, info@example.it'}),
+            'caratteristiche': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'es. Noleggio, Spogliatoi, Bar, ...'}),
             'numero_campi': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'foto': forms.FileInput(attrs={'class': 'form-control-file'}),
         }
@@ -107,15 +108,50 @@ class EditUserForm(forms.ModelForm):
         return instance
 
 
+class NewsForm(forms.ModelForm):
+
+    class Meta:
+        model = News
+        fields = ['titolo', 'descrizione']
+        widgets = {
+            'titolo': forms.TextInput(attrs={'class': 'form-group'}),
+            'descrizione': forms.TextInput(attrs={'class': 'form-group'})
+        }
+
+
 class PrenotazioneForm(forms.ModelForm):
+
+    SCELTA_DURATA = [
+        ('', '---'),
+        (1, '1 ora'),
+        (2, '90 min.'),
+        (3, '2 ore'),
+        (3, '3 ore')
+    ]
+
+    campo = forms.ModelChoiceField(queryset=Campo.objects.all(), label="Campo")
+    durata = forms.ChoiceField(choices=SCELTA_DURATA, label="")
+
     class Meta:
         model = Prenotazione
-        fields = ['data']
-        widgets = {'data': forms.DateInput(attrs={
-            'class': 'form-control',
-            'type': 'date',
-        }),
-        }
+        fields = ['data', 'durata', 'campo']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        today = timezone.now().date()
+        self.fields['data'].widget = forms.DateInput(
+            attrs={
+                'type': 'date',
+                'min': today.strftime('%Y-%m-%d')  # Imposta il valore minimo a oggi
+            }
+        )
+
+    def clean_data(self):
+        data = self.cleaned_data['data']
+        today = timezone.now().date()
+        if data < today:
+            raise ValidationError('Non puoi selezionare una data nel passato.')
+        return data
 
 
 class CercaDisponibilita(forms.ModelForm):

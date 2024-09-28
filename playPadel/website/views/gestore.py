@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 
-from ..forms import ImpiantoForm, CampoForm
+from ..forms import ImpiantoForm, CampoForm, NewsForm
 from ..models import *
 
 
@@ -79,25 +79,69 @@ def crea_impianto(request):
 
 
 @login_required
-def dashboardGestore(request):
+def crea_news(request):
     user = request.user
     impianto = Impianto.objects.filter(gestore_id=user.pk).first()
-    news = News.objects.filter(impianto_id=impianto.pk)
+
+    if request.method == 'POST':
+        form = NewsForm(request.POST)
+        if form.is_valid():
+            news = form.save(commit=False)
+            news.gestore = user
+            news.impianto = impianto
+            news.data = timezone.now()
+            news.save()
+
+            messages.success(request, 'Notizia creata con successo!')
+        else:
+            messages.error(request, 'Errore nella creazione della notizia!')
+
+    return redirect('website:gestore:dashboard_gestore')
+
+
+@login_required
+def dashboardGestore(request):
+    user = request.user
+
+    impianto = Impianto.objects.filter(gestore_id=user.pk).first()
+    news_list = News.objects.filter(gestore_id=user.pk)
     prenotazione = Prenotazione.objects.filter(impianto_id=impianto.pk)
+
     today = datetime.now().date()
     prenotazioni_clienti = []
     for p in prenotazione:
         if p.data >= today:
             prenotazioni_clienti.append(p)
+
+    news_forms = {news.pk: NewsForm(instance=news) for news in news_list}
+
     context = {
         'user': user,
         'impianto': impianto,
-        'news': news,
-        'prenotazioni_clienti': prenotazioni_clienti
+        'news_list': news_list,
+        'prenotazioni_clienti': prenotazioni_clienti,
+        'modifica_news_form': news_forms
     }
     return render(request, 'gestore/dashboard_gestore.html', context)
 
 
+# View per la modifica di una news, usa lo stesso template della dashboard ma utilizza un form per la modifica
+@login_required
+def modifica_news(request, pk):
+    article = get_object_or_404(News, id=pk, gestore=request.user)
+
+    if request.method == 'POST':
+        mod_news = NewsForm(request.POST, instance=article)
+        if mod_news.is_valid():
+            mod_news.save()
+            messages.success(request, 'Notizia modificata con successo!')
+        else:
+            messages.error(request, 'Errore nella modifica della notizia.')
+
+    return redirect('website:gestore:dashboard_gestore')
+
+
+@login_required
 def modificaImpianto(request, slug):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
@@ -140,7 +184,7 @@ def modificaImpianto(request, slug):
     }
     return render(request, 'gestore/modifica_impianto.html', context)
 
-
+@login_required
 def prenotazioniGestore(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')

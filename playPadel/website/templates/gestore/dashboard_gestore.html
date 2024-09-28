@@ -1,6 +1,8 @@
 {% extends "playPadel/base.html" %}
 
 {% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 
 {% block title %} PlayPadel - Dashboard {% endblock %}
 
@@ -53,7 +55,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 text-right">
-                            <a href="{% url 'website:gestore:modifica_impianto_gestore' impianto.slug %}" class="btn btn-outline-info btn-sm" role="button">Modifica Impianto</a>
+                            <a href="{% url 'website:gestore:modifica_impianto_gestore' impianto.slug %}" class="btn btn-outline-dark btn-sm" role="button">Modifica Impianto</a>
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -98,7 +100,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 text-right">
-                            <a href="{% url 'website:gestore:prenotazioni_gestore' %}" class="btn btn-outline-success btn-sm" role="button">Visualizza tutte</a>
+                            <a href="{% url 'website:gestore:prenotazioni_gestore' %}" class="btn btn-outline-info btn-sm" role="button">Visualizza tutte</a>
                         </div>
                     </div>
                 </div>
@@ -133,20 +135,29 @@
             </div>
             <hr class="hr" />
             <div class="row mt-4">
-                <i class="bi bi-newspaper mr-3" style="font-size: 1.3rem"></i><h4>News Impianto</h4>
+                <div class="col-md-12 d-flex w-100 justify-content-between">
+                    <div class="row">
+                        <i class="bi bi-newspaper mr-3" style="font-size: 1.3rem"></i><h4>News Impianto</h4>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-success btn-sm " data-toggle="modal" data-placement="top" title="Crea notizia" data-target="#ModalCrea">
+                            <i class="bi bi-plus"></i> Crea notizia
+                        </button>
+                    </div>
+                </div>
                 <div class="col-md-12 mt-2">
                     <ul class="list-group list-group-flush">
-                        {% for n in news %}
+                        {% for n in news_list reversed %}
                             <li class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"><strong>Titolo: </strong>{{ n.titolo }}</h5>
                                     <div>
-                                        <a class="btn btn-outline-info btn-sm " role="button" data-placement="top" id="{{ n.id }}" data-target="tooltip" title="Modifica news">
+                                        <button class="btn btn-outline-info btn-sm " data-toggle="modal" data-placement="top" title="Modifica notizia" data-target="#ModalModifica-{{ n.id }}">
                                             <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a class="btn btn-outline-danger btn-sm " role="button" data-placement="top" id="{{ n.id }}" data-target="tooltip" title="Cancella news">
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm " data-toggle="modal" data-placement="top" title="Cancella notizia" data-target="#ModalCancella-{{ n.id }}">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                                 <p class="mb-1 text-left">
@@ -155,6 +166,92 @@
                                 </p>
                                 <small class="text-muted">{{ n.data }}</small>
                             </li>
+
+                            <!-- MODAL CREA NEWS -->
+                            <div class="modal fade" id="ModalCrea" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Crea Notizia</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="POST" action="{% url 'website:gestore:crea_news' %}">
+                                            <div class="modal-body text-left">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="titolo">Titolo</label>
+                                                    <input type="text" class="form-control" id="titolo" name="titolo" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="descrizione">Descrizione</label>
+                                                    <textarea class="form-control" id="descrizione" name="descrizione" rows="3" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                                <button type="submit" class="btn btn-success">Crea</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODAL MODIFICA NEWS -->
+                            <div class="modal fade" id="ModalModifica-{{ n.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Modifica Notizia</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="POST" action="{% url 'website:gestore:modifica_news' n.id %}">
+                                            <div class="modal-body text-left">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="titolo">Titolo</label>
+                                                    <input type="text" class="form-control" id="titolo" name="titolo" required value="{{ n.titolo }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="descrizione">Descrizione</label>
+                                                    <textarea class="form-control" id="descrizione" name="descrizione" rows="3" required>{{ n.descrizione }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODAL CONFERMA ELIMINAZIONE NEWS -->
+                            <div class="modal fade" id="ModalCancella-{{ n.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Attenzione!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-left">
+                                            <strong>Stai per eliminare questa notizia!</strong><br>Sei sicuro di voler continuare?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                            <form method="POST" id="{{ n.id }}"  action="/cancella_news/{{ n.id }}/">
+                                                {%csrf_token%}
+                                                <button type="submit" class="btn btn-danger" id="{{ n.id }}">Continua</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% empty %}
                             <h5 class="py-4 mt-4 text-center">Nessuna news pubblicata...</h5>
                         {% endfor %}

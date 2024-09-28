@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic import DetailView, TemplateView, DeleteView
@@ -185,10 +186,33 @@ class ImpiantoDetail(DetailView):
 
         return context
 
+    # Ottieni prenotazioni dell'impianto
+    '''
+    def get_prenotazioni(self, request, *args, **kwargs):
+        campo_id = request.GET.get('campo_id')
+        data = request.GET.get('data')
+
+        if campo_id and data:
+            campo = get_object_or_404(Campo, id=campo_id)
+            prenotazioni = Prenotazione.objects.filter(campo=campo, data=data)
+            orari_prenotati = []
+
+            for prenotazione in prenotazioni:
+                orari_prenotati.append({
+                    'ora_inizio': prenotazione.ora_inizio.strftime('%H:%M'),
+                    'ora_fine': prenotazione.ora_fine.strftime('%H:%M')
+                })
+
+            return JsonResponse({'orari_prenotati': orari_prenotati})
+
+        return JsonResponse({'error': 'Dati non validi'}, status=400)
+    '''
+
+    # Prenotazione
+    @login_required
     def post(self, request, slug, *args, **kwargs):
         form = PrenotazioneForm(request.POST)
         if form.is_valid():
-            # Process the form data (e.g., save the booking)
             return redirect('website:website:conferma_prenotazione', slug=slug)
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -210,6 +234,8 @@ class Prenota(ListView):
     model = Impianto
     template_name = "website/prenota.html"
 
+    # Cercare impianti che hanno disponibilità e redirect a pagina impianto
+
     '''
     def get_queryset(self):
         query = self.request.GET.get("q")
@@ -220,6 +246,7 @@ class Prenota(ListView):
     '''
 
 
+@login_required
 def conferma_prenotazione(request, slug):
     impianto = get_object_or_404(Impianto, slug=slug)
     return render(request, 'website/conferma_prenotazione.html', {
@@ -228,9 +255,19 @@ def conferma_prenotazione(request, slug):
     })
 
 
+@login_required
 def delete_prenotazione(request, pk):
     post = Prenotazione.objects.get(pk=pk)
     pre_url = request.META.get('HTTP_REFERER')
     post.delete()
     messages.success(request, "Prenotazione cancellata!")
+    return redirect(pre_url)
+
+
+@login_required
+def delete_news(request, pk):
+    post = News.objects.get(pk=pk)
+    pre_url = request.META.get('HTTP_REFERER')
+    post.delete()
+    messages.success(request, "News cancellata!")
     return redirect(pre_url)

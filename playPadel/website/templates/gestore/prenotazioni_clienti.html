@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-12 mt-4">
                 <ul class="list-group list-group-flush">
-                    {% for p in prenotazioni_clienti %}
+                    {% for p in prenotazioni_clienti reversed%}
                         <li class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">{{ p.data }} | {{ p.ora_inizio }} - {{ p.ora_fine }}</h5>
@@ -57,7 +57,7 @@
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
                                         <form method="POST" id="{{ p.id }}"  action="/cancella_prenotazione/{{ p.id }}/">
                                             {%csrf_token%}
-                                            <button type="submit" class="btn btn-primary" id="{{ p.id }}">Continua</button>
+                                            <button type="submit" class="btn btn-danger" id="{{ p.id }}">Continua</button>
                                         </form>
                                     </div>
                                 </div>

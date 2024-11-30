@@ -1,18 +1,24 @@
 <form action="{% url 'website:website:cerca_impianto' %}" method="get" class="form-group my-2 needs-validation">
     <div class="row mt-4">
-        <div class="col-md-6 form-inline">
-            <label for="cercaNomeImpianto" class="ml-4"><strong>Cerca impianto per nome</strong></label>
-            <input class='form-control ml-2 w-50' id="cercaNomeImpianto" name="name" type="search" aria-label="Cerca" placeholder="Nome impianto" value="{{ request.GET.name }}">
+        <div class="col-md-2 mt-2">
+            <strong>Cerca impianto:</strong>
         </div>
         <div class="col-md-4 form-inline">
-            <label for="cercaPosizioneImpianto"><strong>Oppure per luogo</strong></label>
-            <input class='form-control ml-2 w-50' id="cercaPosizioneImpianto" name="pos" type="search" aria-label="Cerca" placeholder="Via/Città" value="{{ request.GET.pos }}">
+            <label for="cercaNomeImpianto" class="ml-4"><strong>Nome</strong></label>
+            <input class='form-control ml-2 w-50' id="cercaNomeImpianto" name="name" type="search" aria-label="Cerca" value="{{ request.GET.name }}">
         </div>
-        <div class="col-md-2 text-right">
+        <div class="col-md-4 form-inline">
+            <label for="cercaPosizioneImpianto"><strong>Luogo</strong></label>
+            <input class='form-control ml-2 w-50' id="cercaPosizioneImpianto" name="pos" type="search" aria-label="Cerca" value="{{ request.GET.pos }}">
+        </div>
+        <div class="col-md-1 text-right">
             <button class="btn btn-outline-primary mr-4" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false" aria-controls="collapseExample">
-                <i class="bi bi-magic mr-2"></i>Filtri
+                <i class="bi bi-magic mr-1"></i>Filtra
             </button>
         </div>
+        <div class="col-md-1 text-left">
+        <button class="btn btn-success my-2 my-sm-0 mr-2" type="submit"><i class="bi bi-search"></i></button>
+    </div>
     </div>
     <div class="row mt-2 collapse mx-4" id="filterCollapse">
         <div class="card card-body">
@@ -90,9 +96,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-12 mt-2 text-right">
-        <button class="btn btn-success my-2 my-sm-0 mr-2" type="submit">Cerca</button>
     </div>
 </form>
 <hr class="hr" />

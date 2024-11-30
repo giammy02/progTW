@@ -104,6 +104,9 @@ def dashboardGestore(request):
     user = request.user
 
     impianto = Impianto.objects.filter(gestore_id=user.pk).first()
+    if not impianto:
+        messages.error(request, 'Non hai ancora creato un impianto!')
+        return redirect('website:gestore:crea_impianto_gestore')
     news_list = News.objects.filter(gestore_id=user.pk)
     prenotazione = Prenotazione.objects.filter(impianto_id=impianto.pk)
 

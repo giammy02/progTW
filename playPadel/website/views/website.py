@@ -165,24 +165,27 @@ class ImpiantoDetail(DetailView):
         context['form'] = PrenotazioneForm()
 
         # Formattazione campo orari
-        orario = self.object.orari
-        orario_inizio, orario_fine = orario.split(" - ")
-        formato_orario = "%H:%M"
-        inizio = datetime.strptime(orario_inizio, formato_orario)
-        if orario_fine == "24:00":
-            orario_fine = "00:00"
-            fine = datetime.strptime(orario_fine, formato_orario) + timedelta(days=1)
-        else:
-            fine = datetime.strptime(orario_fine, formato_orario)
-        differenza_orario = int((fine-inizio).total_seconds() / 3600)
-        context['inizio'] = orario_inizio
-        context['differenza_orario'] = range(0, differenza_orario)
-        ore = []
-        ora_corrente = inizio
-        while ora_corrente < fine:
-            ore.append(ora_corrente.strftime('%H:%M'))
-            ora_corrente += timedelta(hours=1)
-        context['ore'] = ore
+        try:
+            orario = self.object.orari
+            orario_inizio, orario_fine = orario.split(" - ")
+            formato_orario = "%H:%M"
+            inizio = datetime.strptime(orario_inizio, formato_orario)
+            if orario_fine == "24:00":
+                orario_fine = "00:00"
+                fine = datetime.strptime(orario_fine, formato_orario) + timedelta(days=1)
+            else:
+                fine = datetime.strptime(orario_fine, formato_orario)
+            differenza_orario = int((fine-inizio).total_seconds() / 3600)
+            context['inizio'] = orario_inizio
+            context['differenza_orario'] = range(0, differenza_orario)
+            ore = []
+            ora_corrente = inizio
+            while ora_corrente < fine:
+                ore.append(ora_corrente.strftime('%H:%M'))
+                ora_corrente += timedelta(hours=1)
+            context['ore'] = ore
+        except ValueError:
+            pass
 
         return context
 

@@ -102,13 +102,18 @@
                 <i class="bi bi-clock-history mr-3" style="font-size: 1.3rem"></i><h4>Storico partite</h4>
             </div>
             <div class="card-deck justify-content-center mt-2">
-                {% for p in dati_partita %}
-                    <div class="card bg-light my-3" style="min-width: 30rem; max-width: 33rem;">
-                        <div class="card-header">{{ p.data }} | {{ p.ora }}</div>
+                {% for p in dati_partita reversed %}
+                    <div class="card bg-light my-3" style="min-width: 30rem; max-width: 33rem; min-height: 228px">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="text mt-1">{{ p.data }} | {{ p.ora }}</div>
+                            <button class="btn btn-outline-info btn-sm " data-toggle="modal" data-placement="top" title="Modifica partita" data-target="#ModalModifica-{{ p.id }}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" style="min-height: 72px">
                                 <div class="col-md-3 text-center my-auto">
-                                    <h5>
+                                    <h5 class="mb-0">
                                         {% for set in p.risultato %}
                                             {{ set }} <br>
                                         {% endfor %}
@@ -134,10 +139,42 @@
                             {{ p.nome_impianto }} - Campo {{ p.num_campo }}
                         </div>
                     </div>
+
+                    <!-- MODAL MODIFICA PARTITA -->
+                    <div class="modal fade" id="ModalModifica-{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Modifica Partita</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="POST" action="{% url 'website:cliente:modifica_partita' p.id %}">
+                                    <div class="modal-body text-left">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="titolo">Risultato</label>
+                                            <input type="text" class="form-control" id="titolo" name="titolo" placeholder="es. 6-3, 6-7, 6-2" required value="{% for set in p.risultato %}{{ set }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="descrizione">Giocatori</label>
+                                            <input type="text" class="form-control" id="descrizione" name="descrizione" placeholder="es. G1, G2, G3, G4" required value="{% for giocatore in p.giocatori %}{{ giocatore }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                                        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 {% empty %}
                     <h5 class="py-4 mt-4">Ancora nessuna partita giocata...</h5>
                 {% endfor %}
             </div>
+
         </div>
     </section>
 

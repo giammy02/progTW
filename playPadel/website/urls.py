@@ -15,7 +15,7 @@ urlpatterns = [
         path('', website.ImpiantiList.as_view(), name='impianti'),
         path('cerca_impianto/', website.CercaImpiantoList.as_view(), name='cerca_impianto'),
         path('<slug:slug>/', website.ImpiantoDetail.as_view(), name='impianto_detail'),
-        # path('<slug:slug>/get_prenotazioni/', website.ImpiantoDetail.as_view(), name='get_prenotazioni'),
+        path('<slug:slug>/get_prenotazioni/', website.ImpiantoDetail.get_prenotazioni, name='get_prenotazioni'),
         path('<slug:slug>/conferma_prenotazione/', website.conferma_prenotazione, name='conferma_prenotazione'),
     ], 'website'), namespace='website')),
 
@@ -23,6 +23,7 @@ urlpatterns = [
         path('dashboard/', cliente.dashboardCliente, name='dashboard_cliente'),
         path('prenotazioni/', cliente.prenotazioniCliente, name='prenotazioni_cliente'),
         path('modifica/', website.modificaUser, name='modifica_cliente'),
+        path('modifica_partita/<int:pk>/', cliente.modifica_partita, name='modifica_partita'),
     ], 'cliente'), namespace='cliente')),
 
     path('gestore/', include(([

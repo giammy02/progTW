@@ -111,10 +111,12 @@
                     </div>
                     <div class="col-md-4 text-right form-inline mb-0">
                         <label for="selectDate" class="mr-2"><strong>Data prenotazione</strong></label>
+                        <input type="hidden" class="form-control" id="id_data" name="data" value="{{ form.data.value|date:'d/m/Y' }}" readonly>
                         {{ form.data|as_crispy_field }}
                     </div>
                     <div class="col-md-3 mb-0 form-inline d-flex justify-content-end">
                         <label for="selectDuration" class="mr-2"><strong>Durata</strong></label>
+                        <input type="hidden" class="form-control" id="id_durata" name="durata" value="{{ form.durata.value }}" readonly>
                         {{ form.durata|as_crispy_field }}
                     </div>
                 </div>
@@ -122,7 +124,7 @@
                     {% for i in campo %}
                         <div class="card bg-transparent my-2" style="border: 1px solid #ddd;">
                             <a class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
-                                <span class="title" style="font-size: 17px; color: #000">Campo {{ i.numero }} - {{ i.tipologia }}</span>
+                                <span class="title" id="id_campo" style="font-size: 17px; color: #000" data-id="{{ i.id }}">Campo {{ i.numero }} - {{ i.tipologia }}</span>
                                 <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-caret-down-fill"></i></span>
                             </a>
                             <div id="collapse{{ forloop.counter }}" class="collapse hidden" data-parent="#accordion">
@@ -187,7 +189,7 @@
         });
     </script>
 
-    <!--
+    <!-- AJAX per controllare la disponibilità degli orari -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -198,7 +200,7 @@
 
                 if (campoId && data) {
                     $.ajax({
-                        url: '',
+                        url: '{% url "website:website:get_prenotazioni" impianto.slug %}',
                         data: {
                             'campo_id': campoId,
                             'data': data
@@ -210,10 +212,25 @@
 
                                 // Controlla se l'orario è prenotato
                                 $.each(response.orari_prenotati, function(index, prenotazione){
-                                    if (hour >= prenotazione.ora_inizio && hour < prenotazione.ora_fine) {
+                                    var ora_inizio = parseInt(prenotazione.ora_inizio.split(':')[0]);
+                                    var ora_fine = parseInt(prenotazione.ora_fine.split(':')[0]);
+
+                                    if (hour >= ora_inizio && hour < ora_fine) {
                                         isAvailable = false;
                                     }
                                 });
+
+                                // Verifica se ci sono abbastanza ore disponibili per la durata
+                                var count = 0;
+                                for (var i = 0; i < durata; i++) {
+                                    if ($('.orario[data-hour="' + (hour + i) + ':00"]').prop('disabled') === true) {
+                                        count++;
+                                    }
+                                }
+
+                                if (count >= durata) {
+                                    isAvailable = false;
+                                }
 
                                 if (!isAvailable) {
                                     $(this).removeClass('btn-outline-primary').addClass('btn-danger').prop('disabled', true);
@@ -228,41 +245,7 @@
                 }
             });
         });
-
-        success: function(response) {
-            var durata = parseInt($('#id_durata').val());
-
-            $('.orario').each(function(){
-                var hour = parseInt($(this).data('hour'));
-                var isAvailable = true;
-
-                // Controlla se l'orario è prenotato
-                $.each(response.orari_prenotati, function(index, prenotazione){
-                    var ora_inizio = parseInt(prenotazione.ora_inizio.split(':')[0]);
-                    var ora_fine = parseInt(prenotazione.ora_fine.split(':')[0]);
-
-                    if (hour >= ora_inizio && hour < ora_fine) {
-                        isAvailable = false;
-                    }
-                });
-
-                // Verifica se ci sono abbastanza ore disponibili per la durata
-                for (var i = 0; i < durata; i++) {
-                    if ($('.orario[data-hour="' + (hour + i) + ':00"]').prop('disabled') === true) {
-                        isAvailable = false;
-                        break;
-                    }
-                }
-
-                if (!isAvailable) {
-                    $(this).removeClass('btn-outline-primary').addClass('btn-danger').prop('disabled', true);
-                } else {
-                    $(this).removeClass('btn-danger').addClass('btn-outline-primary').prop('disabled', false);
-                }
-            });
-        }
     </script>
-    -->
 
 {% endblock %}
 

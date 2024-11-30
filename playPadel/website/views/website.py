@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
-from django.views.generic import DetailView, TemplateView, DeleteView
+from django.views.generic import DetailView, TemplateView
 from django.db.models import Q
 
 from ..models import *
@@ -187,7 +187,6 @@ class ImpiantoDetail(DetailView):
         return context
 
     # Ottieni prenotazioni dell'impianto
-    '''
     def get_prenotazioni(self, request, *args, **kwargs):
         campo_id = request.GET.get('campo_id')
         data = request.GET.get('data')
@@ -206,9 +205,8 @@ class ImpiantoDetail(DetailView):
             return JsonResponse({'orari_prenotati': orari_prenotati})
 
         return JsonResponse({'error': 'Dati non validi'}, status=400)
-    '''
 
-    # Prenotazione
+    # Effettua prenotazione
     @login_required
     def post(self, request, slug, *args, **kwargs):
         form = PrenotazioneForm(request.POST)
@@ -223,12 +221,50 @@ class CercaImpiantoList(ListView):
     template_name = "website/cerca_impianto.html"
 
     def get_queryset(self):
-        query = self.request.GET.get("q")
-        object_list = Impianto.objects.filter(
-            Q(nome__icontains=query) | Q(caratteristiche__icontains=query)
-        )
-        return object_list
+        name = self.request.GET.get("name")  # Nome impianto
+        pos = self.request.GET.get("pos")  # Posizione
+        mnc = self.request.GET.get("mnc")  # Numero minimo campi
+        pm = self.request.GET.get("pm")  # Prezzo massimo
+        ind = self.request.GET.get("ind")  # Indoor
+        out = self.request.GET.get("out")  # Outdoor
+        ccNoleggio = self.request.GET.get("ccNoleggio")  # Caratteristiche: Noleggio
+        ccSpogliatoi = self.request.GET.get("ccSpogliatoi")  # Caratteristiche: Spogliatoi
+        ccDocce = self.request.GET.get("ccDocce")  # Caratteristiche: Docce
+        ccBar = self.request.GET.get("ccBar")  # Caratteristiche: Bar
+        ccParcheggio = self.request.GET.get("ccParcheggio")  # Caratteristiche: Parcheggio
+        ccAltro = self.request.GET.get("ccAltro")  # Caratteristiche: Altro
+        queries = []
 
+        if name:
+            queries.append(Q(nome__icontains=name))
+        if pos:
+            queries.append(Q(posizione__icontains=pos))
+        if mnc:
+            queries.append(Q(numero_campi__gte=mnc))
+        if pm:
+            queries.append(Q(prezzi__lte=pm))
+        if ind == 'on':
+            queries.append(Q(id__in=Campo.objects.filter(tipologia='Indoor').values_list('impianto', flat=True)))
+        if out == 'on':
+            queries.append(Q(id__in=Campo.objects.filter(tipologia='Outdoor').values_list('impianto', flat=True)))
+        if ccNoleggio == 'on':
+            queries.append(Q(caratteristiche__icontains="Noleggio"))
+        if ccSpogliatoi == 'on':
+            queries.append(Q(caratteristiche__icontains="Spogliatoi"))
+        if ccDocce == 'on':
+            queries.append(Q(caratteristiche__icontains="Docce"))
+        if ccBar == 'on':
+            queries.append(Q(caratteristiche__icontains="Bar"))
+        if ccParcheggio == 'on':
+            queries.append(Q(caratteristiche__icontains="Parcheggio"))
+        if ccAltro == 'on':
+            queries.append(Q(caratteristiche__icontains=""))
+
+        if queries:
+            object_list = Impianto.objects.filter(*queries)
+        else:
+            object_list = Impianto.objects.all()
+        return object_list
 
 class Prenota(ListView):
     model = Impianto

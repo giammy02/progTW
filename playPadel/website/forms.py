@@ -119,13 +119,23 @@ class NewsForm(forms.ModelForm):
         }
 
 
+class PartitaForm(forms.ModelForm):
+
+    class Meta:
+        model = Partita
+        fields = ['risultato', 'giocatori']
+        widgets = {
+            'risultato': forms.TextInput(attrs={'class': 'form-group'}),
+            'giocatori': forms.TextInput(attrs={'class': 'form-group'})
+        }
+
+
 class PrenotazioneForm(forms.ModelForm):
 
     SCELTA_DURATA = [
         ('', '---'),
         (1, '1 ora'),
-        (2, '90 min.'),
-        (3, '2 ore'),
+        (2, '2 ore'),
         (3, '3 ore')
     ]
 
@@ -145,13 +155,6 @@ class PrenotazioneForm(forms.ModelForm):
                 'min': today.strftime('%Y-%m-%d')  # Imposta il valore minimo a oggi
             }
         )
-
-    def clean_data(self):
-        data = self.cleaned_data['data']
-        today = timezone.now().date()
-        if data < today:
-            raise ValidationError('Non puoi selezionare una data nel passato.')
-        return data
 
 
 class CercaDisponibilita(forms.ModelForm):

@@ -10,7 +10,7 @@
         </div>
         <div class="col-md-2 text-right">
             <button class="btn btn-outline-primary mr-4" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false" aria-controls="collapseExample">
-                Aggiungi filtri
+                <i class="bi bi-magic mr-2"></i>Filtri
             </button>
         </div>
     </div>
@@ -62,45 +62,31 @@
                         </div>
                         <div class="row form-check-inline mt-1">
                             <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" name="ccNoleggio" id="serviziNoleggio">
+                                <input class="custom-control-input" type="checkbox" name="ccNoleggio" id="serviziNoleggio" {% if request.GET.ccNoleggio == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziNoleggio">Noleggio</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2">
-                                <input class="custom-control-input" type="checkbox" name="ccSpogliatoi" id="serviziSpogliatoi">
+                                <input class="custom-control-input" type="checkbox" name="ccSpogliatoi" id="serviziSpogliatoi" {% if request.GET.ccSpogliatoi == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziSpogliatoi">Spogliatoi</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2">
-                                <input class="custom-control-input" type="checkbox" name="ccDocce" id="serviziDocce">
+                                <input class="custom-control-input" type="checkbox" name="ccDocce" id="serviziDocce" {% if request.GET.ccDocce == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziDocce">Docce</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2">
-                                <input class="custom-control-input" type="checkbox" name="ccBar" id="serviziBar">
+                                <input class="custom-control-input" type="checkbox" name="ccBar" id="serviziBar" {% if request.GET.ccBar == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziBar">Bar</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2">
-                                <input class="custom-control-input" type="checkbox" name="ccParcheggio" id="serviziParcheggio">
+                                <input class="custom-control-input" type="checkbox" name="ccParcheggio" id="serviziParcheggio" {% if request.GET.ccParcheggio == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziParcheggio">Parcheggio</label>
                             </div>
                             <div class="custom-control custom-checkbox ml-2">
-                                <input class="custom-control-input" type="checkbox" name="ccAltro" id="serviziAltro">
+                                <input class="custom-control-input" type="checkbox" name="ccAltro" id="serviziAltro" {% if request.GET.ccAltro == 'on' %}checked{% endif %}>
                                 <label class="custom-control-label" for="serviziAltro">Altro</label>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-6 text-left">
-                    <input type="reset" class="btn btn-outline-danger" value="Cancella filtri">
-                    <script>
-                        const resetButton = document.querySelector('input[type=reset]');
-                        resetButton.addEventListener('click', function() {
-                            setTimeout(() => {
-                                inputMinNumCampiValue.innerText = inputMinNumCampi.value;
-                                inputPrezzoMaxValue.innerText = inputPrezzoMax.value;
-                            }, 100); // Aspetta 0.1 secondi prima di aggiornare il testo degli input range
-                        });
-                    </script>
                 </div>
             </div>
         </div>

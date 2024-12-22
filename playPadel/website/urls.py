@@ -7,7 +7,6 @@ app_name = 'website'
 
 urlpatterns = [
     path('', website.homepage, name='homepage'),
-    path('prenota/', website.Prenota.as_view(), name='prenota'),
     path('cancella_prenotazione/<int:pk>/', website.delete_prenotazione),
     path('cancella_news/<int:pk>/', website.delete_news),
 

@@ -240,21 +240,6 @@ class CercaImpiantoList(ListView):
             object_list = Impianto.objects.all()
         return object_list
 
-class Prenota(ListView):
-    model = Impianto
-    template_name = "website/prenota.html"
-
-    # Cercare impianti che hanno disponibilità e redirect a pagina impianto
-
-    '''
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        object_list = Impianto.objects.filter(
-            Q(nome__icontains=query) | Q(caratteristiche__icontains=query)
-        )
-        return object_list
-    '''
-
 
 def get_prenotazioni(request, slug):
     campo_id = request.GET.get('campo_id')

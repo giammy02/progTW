@@ -104,36 +104,33 @@
             <hr class="hr" />
             <form method="post" action="{% url 'website:website:conferma_prenotazione' slug=object.slug %}">
                 {% csrf_token %}
+                <input type="hidden" name="ora_inizio" id="ora_inizio" value="">
+                <input type="hidden" name="ora_fine" id="ora_fine" value="">
+                <input type="hidden" name="campo" id="campo" value="">
                 <div class="row my-4">
-                    <div class="col-md-5 d-flex align-items-center">
+                    <div class="col-md-6 d-flex align-items-center">
                         <i class="bi bi-list-ol mr-2" style="font-size: 1.5rem"></i>
                         <h2>Lista campi</h2>
                     </div>
-                    <div class="col-md-4 text-right form-inline mb-0">
-                        <label for="selectDate" class="mr-2"><strong>Data prenotazione</strong></label>
-                        <input type="hidden" class="form-control" id="id_data" name="data" value="{{ form.data.value|date:'d/m/Y' }}" readonly>
+                    <div class="col-md-6 text-right d-flex justify-content-end form-inline mb-0">
+                        <label for="selectDate" class="mr-2"><strong>Data</strong></label>
+                        <input type="hidden" class="form-control" id="id_data_hidden" name="data" value="{{ form.data.value|date:'d/m/Y' }}" readonly>
                         {{ form.data|as_crispy_field }}
-                    </div>
-                    <div class="col-md-3 mb-0 form-inline d-flex justify-content-end">
-                        <label for="selectDuration" class="mr-2"><strong>Durata</strong></label>
-                        <input type="hidden" class="form-control" id="id_durata" name="durata" value="{{ form.durata.value }}" readonly>
-                        {{ form.durata|as_crispy_field }}
                     </div>
                 </div>
                 <div id="accordion">
                     {% for i in campo %}
-                        <div class="card bg-transparent my-2" style="border: 1px solid #ddd;">
-                            <a class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false">
+                        <div class="card bg-transparent my-2" style="border: 1px solid #ddd">
+                            <a class="card-header bg-transparent" style="cursor: pointer" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" onclick="rotateIcon({{ forloop.counter }})">
                                 <span class="title" id="id_campo" style="font-size: 17px; color: #000" data-id="{{ i.id }}">Campo {{ i.numero }} - {{ i.tipologia }}</span>
-                                <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-caret-down-fill"></i></span>
+                                <span class="accicon float-right" style="font-size: 20px; width: 1.2em;"><i class="bi bi-caret-up-fill" id="icon-{{ forloop.counter }}"></i></span>
                             </a>
                             <div id="collapse{{ forloop.counter }}" class="collapse hidden" data-parent="#accordion">
                                 <div class="card-body" style="border-top: 1px solid #ddd;">
                                     <div class="btn-group-toggle" data-toggle="buttons">
                                         {% for ora in ore %}
-                                            <label class="btn btn-outline-primary inactive my-1" style="min-width: 70px;" id="{{ ora }}">
-                                                <input type="radio" checked autocomplete="off"> {{ ora }}
-                                                <!-- SE ESISTE PRENOTAZIONE DI MEZZ'ORA CONTROLLARE CON IF E FARE APPEND BOTTONE CAMBIO ORA-->
+                                            <label class="btn btn-outline-primary my-1" style="min-width: 70px; box-shadow: none;" id="{{ ora }}">
+                                                <input type="checkbox" name="ore" id="id_{{ forloop.counter }}_campo_{{ i.id }}" value="{{ ora }}" autocomplete="off"> {{ ora }}
                                             </label>
                                         {% endfor %}
                                     </div>
@@ -143,14 +140,15 @@
                     {% endfor %}
                 </div>
                 <div class="row align-items-center my-4">
-                    <div class="col-md-4 text-left">
-                        <input type="reset" class="btn btn-outline-danger" value="Annulla selezione"/>
+                    <div class="col-md-4 text-left mb-0">
+                        <h5 class="align-bottom mb-0">Durata: <span id="durata">0</span> minuti</h5>
+                        <h5 class="align-bottom mb-0"><span id="orari" style="display: none"></span></h5>
                     </div>
                     <div class="col-md-6 text-right mb-0">
-                        <h5 class="align-bottom mb-0">Totale: <span id="totalCost">0.00</span>€</h5>
+                        <h5 class="align-bottom mb-0">Totale: <span id="totalCost"> 0.00</span>€</h5>
                     </div>
                     <div class="col-md-2 text-right">
-                        <button type="submit" class="btn btn-outline-success">
+                        <button type="submit" class="btn btn-outline-success" id="btn_prenota" disabled>
                             <strong>Prenota </strong><i class="bi bi-calendar2-check"></i>
                         </button>
                     </div>
@@ -158,7 +156,6 @@
             </form>
         </div>
     </section>
-
 
     <!-- Modifica delle frecce del carousel in scuro -->
     <style>
@@ -169,82 +166,226 @@
         }
     </style>
 
-    <!-- Script per modificare il prezzo totale in base alla scelta della durata -->
     <script>
-        document.getElementById('selectDuration').addEventListener('change', function() {
-            var duration = this.value; // Get the selected service duration in minutes
-
-            if (duration) { // Check if a valid option is selected
-                var costPerHour = {{ object.prezzi }}; // Let's assume the service costs $50 per hour
-
-                // Convert duration to hours and calculate total cost
-                var totalCost = (duration / 60) * costPerHour;
-
-                // Update the total cost in the HTML
-                document.getElementById('totalCost').innerText = totalCost.toFixed(2);
-            } else {
-                // Reset the total cost if no valid option is selected
-                document.getElementById('totalCost').innerText = '0.00';
-            }
-        });
+        function rotateIcon(i) {
+            document.getElementById('icon-' + i).classList.toggle('bi-caret-down-fill');
+            document.getElementById('icon-' + i).classList.toggle('bi-caret-up-fill');
+        }
     </script>
 
     <!-- AJAX per controllare la disponibilità degli orari -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#check-orari').click(function(){
-                var campoId = $('#id_campo').val();
-                var data = $('#id_data').val();
-                var durata = $('#id_durata').val();
-
-                if (campoId && data) {
+            let dataEl = document.getElementById('id_data');
+            dataEl.onchange = function() {
+                let campiId = [];
+                let campi = document.querySelectorAll('#id_campo');
+                campi.forEach(function(campo) {
+                    campiId.push(campo.getAttribute('data-id'));
+                });
+                // console.log('campiId', campiId );
+                campiId.forEach(function(campoId) {
                     $.ajax({
                         url: '{% url "website:website:get_prenotazioni" impianto.slug %}',
                         data: {
                             'campo_id': campoId,
-                            'data': data
+                            'data': dataEl.value,
                         },
+
+                        // Funzione che controlla che l'orario non sia prenotato
                         success: function(response) {
-                            $('.orario').each(function(){
-                                var hour = $(this).data('hour');
-                                var isAvailable = true;
+                            let campoId = response.campo_id;
+                            $('input[name="ore"]').each(function() {
+                                let checkboxId = $(this).attr('id');
+                                let campoCheckboxId = checkboxId.split('_').pop();
 
-                                // Controlla se l'orario è prenotato
-                                $.each(response.orari_prenotati, function(index, prenotazione){
-                                    var ora_inizio = parseInt(prenotazione.ora_inizio.split(':')[0]);
-                                    var ora_fine = parseInt(prenotazione.ora_fine.split(':')[0]);
+                                // Procedi solo se l'ID del campo della checkbox corrisponde a quello restituito dal server
+                                if (campoCheckboxId === campoId.toString()) {
+                                    let hour = $(this).val();
+                                    let isAvailable = true;
 
-                                    if (hour >= ora_inizio && hour < ora_fine) {
-                                        isAvailable = false;
+                                    // Controlla se l'orario è prenotato
+                                    response.orari_prenotati.forEach(function(prenotazione) {
+                                        let oraInizio = parseInt(prenotazione.ora_inizio.split(':')[0]) * 60 + parseInt(prenotazione.ora_inizio.split(':')[1]);
+                                        let oraFine = parseInt(prenotazione.ora_fine.split(':')[0]) * 60 + parseInt(prenotazione.ora_fine.split(':')[1]);
+                                        let hourTime = parseInt(hour.split(':')[0]) * 60 + parseInt(hour.split(':')[1]);
+
+                                        if (hourTime >= oraInizio && hourTime < oraFine) {
+                                            isAvailable = false;
+                                            console.log('Orario ' + hour + ' non disponibile per il campo ' + campoId);
+                                        }
+                                    });
+
+                                    // Aggiorna lo stato della checkbox e lo stile
+                                    if (!isAvailable) {
+                                        $(this).closest('label').removeClass('btn-outline-primary').addClass('btn-light');
+                                        $(this).prop('disabled', true);
+                                    } else {
+                                        $(this).closest('label').removeClass('btn-light').addClass('btn-outline-primary');
+                                        $(this).prop('disabled', false);
                                     }
-                                });
-
-                                // Verifica se ci sono abbastanza ore disponibili per la durata
-                                var count = 0;
-                                for (var i = 0; i < durata; i++) {
-                                    if ($('.orario[data-hour="' + (hour + i) + ':00"]').prop('disabled') === true) {
-                                        count++;
-                                    }
-                                }
-
-                                if (count >= durata) {
-                                    isAvailable = false;
-                                }
-
-                                if (!isAvailable) {
-                                    $(this).removeClass('btn-outline-primary').addClass('btn-danger').prop('disabled', true);
-                                } else {
-                                    $(this).removeClass('btn-danger').addClass('btn-outline-primary').prop('disabled', false);
                                 }
                             });
+                    },
+                        error: function(xhr, status, error) {
+                            console.log(error);
                         }
                     });
-                } else {
-                    alert('Seleziona un campo e una data.');
+                });
+            }
+
+            // Script per gestire le checkbox (orari adiacenti, alert, prezzo, durata, orari)
+            let checkboxes = document.querySelectorAll('input[name="ore"]');
+            let text = "";
+            let selectedIds = [];
+            let selectedOre = [];
+            let selectedOreParsed = [];
+            let minId;
+            let maxId;
+            let minOra;
+            let maxOra;
+            checkboxes.forEach(function(checkbox) {
+                checkbox.onchange = function(){
+                    let idOra = parseInt(checkbox.id.split('_')[1]);
+                    let campoId = checkbox.id.split('_')[3];
+                    let data = dataEl.value;
+                    let ora = checkbox.value;
+                    // console.log('idOra', idOra, ora, data, 'campo', campoId);
+
+                    if (campoId && data) {
+                        if (checkbox.checked) {
+                            if (selectedIds.length > 0) {
+                                if ((idOra < minId -1 || idOra > maxId +1)) {
+                                    checkbox.checked = false;
+                                    text = "Seleziona orari adiacenti.";
+                                    deselectCheckbox(checkbox.parentElement, text);
+                                } else {
+                                    selectedIds.push(parseInt(checkbox.id.split('_')[1]));
+                                    selectedOre.push(checkbox.value);
+                                    minId = Math.min(...selectedIds);
+                                    maxId = Math.max(...selectedIds);
+                                    selectedOre.forEach(function(ora) {
+                                        let oraInMinuti = parseInt(ora.split(':')[0]) * 60 + parseInt(ora.split(':')[1]);
+                                        selectedOreParsed.push(oraInMinuti);
+                                    });
+                                    minOra = Math.min(...selectedOreParsed);
+                                    maxOra = Math.max(...selectedOreParsed);
+                                    maxOra = maxOra + 30; // + 30 minuti
+                                    minOra = `${Math.floor(minOra / 60)}:${(minOra % 60).toString().padStart(2, '0')}`;
+                                    maxOra = `${Math.floor(maxOra / 60)}:${(maxOra % 60).toString().padStart(2, '0')}`;
+                                    document.getElementById('btn_prenota').disabled = false;
+                                }
+                            }else{
+                                document.getElementById('btn_prenota').disabled = false;
+                                document.getElementById('orari').style.display = 'block';
+                                minId = idOra;
+                                maxId = idOra;
+                                minOra = parseInt(ora.split(':')[0]) * 60 + parseInt(ora.split(':')[1]);
+                                maxOra = parseInt(ora.split(':')[0]) * 60 + parseInt(ora.split(':')[1]);
+                                maxOra = maxOra + 30; // + 30 minuti
+                                minOra = `${Math.floor(minOra / 60)}:${(minOra % 60).toString().padStart(2, '0')}`;
+                                maxOra = `${Math.floor(maxOra / 60)}:${(maxOra % 60).toString().padStart(2, '0')}`;
+                                selectedIds.push(parseInt(checkbox.id.split('_')[1]));
+                                selectedOre.push(checkbox.value);
+                                selectedOreParsed.push(parseInt(ora.split(':')[0]) * 60 + parseInt(ora.split(':')[1]));
+                            }
+                        } else {
+                            if (selectedIds.length === 1 && selectedIds[0] === idOra) {
+                                selectedIds = [];
+                                selectedOre = [];
+                                selectedOreParsed = [];
+                                minId = null;
+                                maxId = null;
+                                minOra = null;
+                                maxOra = null;
+                                minOra = '00:00';
+                                maxOra = '00:00';
+                                document.getElementById('orari').style.display = 'none';
+                                document.getElementById('btn_prenota').disabled = true;
+                            } else {
+                                if (idOra === minId || idOra === maxId) {
+                                    selectedIds = selectedIds.filter(id => id !== parseInt(checkbox.id.split('_')[1]));
+                                    selectedOre = selectedOre.filter(ora => ora !== checkbox.value);
+                                    minId = Math.min(...selectedIds);
+                                    maxId = Math.max(...selectedIds);
+                                    let oraInMinuti = parseInt(ora.split(':')[0]) * 60 + parseInt(ora.split(':')[1]);
+                                    selectedOreParsed = selectedOreParsed.filter(ora => ora !== oraInMinuti);
+                                    minOra = Math.min(...selectedOreParsed);
+                                    maxOra = Math.max(...selectedOreParsed);
+                                    maxOra = maxOra + 30; // + 30 minuti
+                                    minOra = `${Math.floor(minOra / 60)}:${(minOra % 60).toString().padStart(2, '0')}`;
+                                    maxOra = `${Math.floor(maxOra / 60)}:${(maxOra % 60).toString().padStart(2, '0')}`;
+                                    document.getElementById('btn_prenota').disabled = false;
+                                } else {
+                                    checkbox.checked = true;
+                                    text = "Gli orari devono essere adiacenti.";
+                                    selectCheckbox(checkbox.parentElement, text);
+                                }
+                            }
+                        }
+
+                        // console.log('minId', minId, 'maxId', maxId);
+                        // console.log('Ora inizio', minOra, 'Ora fine', maxOra);
+                        // console.log('selectedIds', selectedIds);
+                        // console.log('selectedOre', selectedOre);
+                    } else {
+                        checkbox.checked = false;
+                        text = "Seleziona una data.";
+                        deselectCheckbox(checkbox.parentElement, text);
+                    }
+
+                    // Calcola e stampa il prezzo totale, durata e orari
+                    let numSelected = document.querySelectorAll('input[name="ore"]:checked').length;
+                    let costPerHour = parseFloat({{ object.prezzi }});
+                    let totalCost = numSelected * (costPerHour / 2);
+                    document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+                    document.getElementById('durata').innerText = numSelected * 30;
+                    document.getElementById('orari').innerText = minOra + ' - ' + maxOra;
+                    document.getElementById('ora_inizio').value = minOra;
+                    document.getElementById('ora_fine').value = maxOra;
+                    document.getElementById('campo').value = campoId;
                 }
             });
         });
+
+        // Deseleziona una checkbox
+        function deselectCheckbox(element, text = null) {
+            element.classList.remove('checked');
+            element.classList.remove('focus');
+            element.classList.remove('btn');
+            element.classList.remove('btn-outline-primary');
+            // Ricalcola lo stile visivo
+            setTimeout(() => {
+                element.classList.remove('active');
+                element.classList.add('btn');
+                element.classList.add('btn-outline-primary');
+            }, 10)
+
+            if (text) {
+                setTimeout(() => {
+                    alert(text);
+                }, 200)
+            }
+        }
+
+        // Seleziona una checkbox
+        function selectCheckbox(element, text) {
+            element.classList.add('checked');
+            element.classList.add('focus');
+            element.classList.remove('btn');
+            element.classList.remove('btn-outline-primary');
+            // Ricalcola lo stile visivo
+            setTimeout(() => {
+                element.classList.add('active');
+                element.classList.add('btn');
+                element.classList.add('btn-outline-primary');
+            }, 10)
+
+            setTimeout(() => {
+                alert(text);
+            }, 200)
+        }
     </script>
 
 {% endblock %}

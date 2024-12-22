@@ -51,10 +51,7 @@ def modifica_partita(request, pk):
     if request.method == 'POST':
         form = PartitaForm(request.POST, instance=partita)
         if form.is_valid():
-            partita = form.save(commit=False)
-            partita.cliente_id = request.user.pk
-            partita.prenotazione_id = partita.prenotazione.id
-            partita.save()
+            form.save()
             messages.success(request, 'Partita modificata con successo!')
         else:
             messages.error(request, 'Errore nella modifica della partita.')

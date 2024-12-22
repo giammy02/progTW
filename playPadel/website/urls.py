@@ -15,7 +15,7 @@ urlpatterns = [
         path('', website.ImpiantiList.as_view(), name='impianti'),
         path('cerca_impianto/', website.CercaImpiantoList.as_view(), name='cerca_impianto'),
         path('<slug:slug>/', website.ImpiantoDetail.as_view(), name='impianto_detail'),
-        path('<slug:slug>/get_prenotazioni/', website.ImpiantoDetail.get_prenotazioni, name='get_prenotazioni'),
+        path('<slug:slug>/get_prenotazioni/', website.get_prenotazioni, name='get_prenotazioni'),
         path('<slug:slug>/conferma_prenotazione/', website.conferma_prenotazione, name='conferma_prenotazione'),
     ], 'website'), namespace='website')),
 

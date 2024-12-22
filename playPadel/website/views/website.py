@@ -182,41 +182,12 @@ class ImpiantoDetail(DetailView):
             ora_corrente = inizio
             while ora_corrente < fine:
                 ore.append(ora_corrente.strftime('%H:%M'))
-                ora_corrente += timedelta(hours=1)
+                ora_corrente += timedelta(minutes=30)
             context['ore'] = ore
         except ValueError:
             pass
 
         return context
-
-    # Ottieni prenotazioni dell'impianto
-    def get_prenotazioni(self, request, *args, **kwargs):
-        campo_id = request.GET.get('campo_id')
-        data = request.GET.get('data')
-
-        if campo_id and data:
-            campo = get_object_or_404(Campo, id=campo_id)
-            prenotazioni = Prenotazione.objects.filter(campo=campo, data=data)
-            orari_prenotati = []
-
-            for prenotazione in prenotazioni:
-                orari_prenotati.append({
-                    'ora_inizio': prenotazione.ora_inizio.strftime('%H:%M'),
-                    'ora_fine': prenotazione.ora_fine.strftime('%H:%M')
-                })
-
-            return JsonResponse({'orari_prenotati': orari_prenotati})
-
-        return JsonResponse({'error': 'Dati non validi'}, status=400)
-
-    # Effettua prenotazione
-    @login_required
-    def post(self, request, slug, *args, **kwargs):
-        form = PrenotazioneForm(request.POST)
-        if form.is_valid():
-            return redirect('website:website:conferma_prenotazione', slug=slug)
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
 
 
 class CercaImpiantoList(ListView):
@@ -285,9 +256,42 @@ class Prenota(ListView):
     '''
 
 
+def get_prenotazioni(request, slug):
+    campo_id = request.GET.get('campo_id')
+    data = request.GET.get('data')
+
+    if campo_id and data:
+        campo = get_object_or_404(Campo, id=campo_id)
+        prenotazioni = Prenotazione.objects.filter(campo=campo, data=data)
+        orari_prenotati = []
+
+        for prenotazione in prenotazioni:
+            orari_prenotati.append({
+                'ora_inizio': prenotazione.ora_inizio.strftime('%H:%M'),
+                'ora_fine': prenotazione.ora_fine.strftime('%H:%M')
+            })
+
+        return JsonResponse({'campo_id': campo_id, 'orari_prenotati': orari_prenotati})
+
+    return JsonResponse({'error': 'Dati non validi'}, status=400)
+
+
 @login_required
 def conferma_prenotazione(request, slug):
     impianto = get_object_or_404(Impianto, slug=slug)
+    data = request.POST.get('data')
+    ora_inizio = request.POST.get('ora_inizio')
+    ora_fine = request.POST.get('ora_fine')
+    campo = request.POST.get('campo')
+
+    Prenotazione.objects.create(
+        impianto=impianto,
+        cliente=request.user,
+        data=data,
+        ora_inizio=ora_inizio,
+        ora_fine=ora_fine,
+        campo_id=campo
+    )
     return render(request, 'website/conferma_prenotazione.html', {
         'slug': slug,
         'impianto': impianto

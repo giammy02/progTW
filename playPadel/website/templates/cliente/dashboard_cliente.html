@@ -155,11 +155,11 @@
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <label for="titolo">Risultato</label>
-                                            <input type="text" class="form-control" id="titolo" name="titolo" placeholder="es. 6-3, 6-7, 6-2" required value="{% for set in p.risultato %}{{ set }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                            <input type="text" class="form-control" id="titolo" name="risultato" placeholder="es. 6-3, 6-7, 6-2" required value="{% for set in p.risultato %}{{ set }}{% if not forloop.last %}, {% endif %}{% endfor %}">
                                         </div>
                                         <div class="form-group">
                                             <label for="descrizione">Giocatori</label>
-                                            <input type="text" class="form-control" id="descrizione" name="descrizione" placeholder="es. G1, G2, G3, G4" required value="{% for giocatore in p.giocatori %}{{ giocatore }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                            <input type="text" class="form-control" id="descrizione" name="giocatori" placeholder="es. G1, G2, G3, G4" required value="{% for giocatore in p.giocatori %}{{ giocatore }}{% if not forloop.last %}, {% endif %}{% endfor %}">
                                         </div>
                                     </div>
                                     <div class="modal-footer">

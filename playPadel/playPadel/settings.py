@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'website',
     'crispy_forms',
     'crispy_bootstrap4',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,8 @@ MESSAGE_TAGS = {
         messages.WARNING: 'warning',
         messages.ERROR: 'danger',
  }
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+}

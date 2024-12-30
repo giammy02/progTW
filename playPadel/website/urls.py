@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.urls import path, include, re_path
 from django.views.static import serve
-from django.conf.urls import handler404, handler500
 
 from .views import website as website
 from .views import cliente as cliente

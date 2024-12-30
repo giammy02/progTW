@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.forms import inlineformset_factory, modelformset_factory
 from django.shortcuts import redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 
@@ -11,7 +11,12 @@ from ..forms import ImpiantoForm, CampoForm, NewsForm
 from ..models import *
 
 
+def is_gestore(user):
+    return user.groups.filter(name='Gestore').exists()
+
+
 @login_required
+@user_passes_test(is_gestore)
 def crea_impianto(request):
     if request.method == 'POST':
         if 'impianto_id' in request.session:
@@ -100,6 +105,7 @@ def crea_news(request):
 
 
 @login_required
+@user_passes_test(is_gestore)
 def dashboardGestore(request):
     user = request.user
 
@@ -145,6 +151,7 @@ def modifica_news(request, pk):
 
 
 @login_required
+@user_passes_test(is_gestore)
 def modificaImpianto(request, slug):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')
@@ -188,6 +195,7 @@ def modificaImpianto(request, slug):
     return render(request, 'gestore/modifica_impianto.html', context)
 
 @login_required
+@user_passes_test(is_gestore)
 def prenotazioniGestore(request):
     user = request.user
     pre_url = request.META.get('HTTP_REFERER')

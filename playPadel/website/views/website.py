@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,8 +14,20 @@ from ..models import *
 from ..forms import PrenotazioneForm, UserSignUpForm, Step2UserForm, EditUserForm
 
 
+def is_cliente(user):
+    return user.groups.filter(name='Cliente').exists()
+
+
 def homepage(request):
     return render(request, 'website/homepage.html')
+
+
+def error_404(request, exception):
+    return render(request, 'playPadel/404.html', status=404)
+
+
+def error_500(request):
+    return render(request, 'playPadel/500.html', status=500)
 
 
 class MyLoginView(LoginView):
@@ -62,9 +75,13 @@ def registrazione_utente(request):
             user.save()
 
             if user_type == 'gestore':
+                gestore_group, created = Group.objects.get_or_create(name='Gestore')
+                user.groups.add(gestore_group)
                 messages.info(request, "Registrazione avvenuta! Proseguire con il login per creare l'impianto")
                 return redirect('website:gestore:crea_impianto_gestore')
             else:
+                cliente_group, created = Group.objects.get_or_create(name='Cliente')
+                user.groups.add(cliente_group)
                 messages.success(request, 'Registrazione completata con successo!')
                 return redirect('login')
         else:
@@ -262,6 +279,7 @@ def get_prenotazioni(request, slug):
 
 
 @login_required
+@user_passes_test(is_cliente)
 def conferma_prenotazione(request, slug):
     impianto = get_object_or_404(Impianto, slug=slug)
     data = request.POST.get('data')

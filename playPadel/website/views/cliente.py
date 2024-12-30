@@ -2,14 +2,19 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from ..models import *
 
 from ..forms import PartitaForm
 
 
+def is_cliente(user):
+    return user.groups.filter(name='Cliente').exists()
+
+
 @login_required
+@user_passes_test(is_cliente)
 def dashboardCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
@@ -60,6 +65,7 @@ def modifica_partita(request, pk):
 
 
 @login_required
+@user_passes_test(is_cliente)
 def prenotazioniCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)

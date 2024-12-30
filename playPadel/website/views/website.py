@@ -295,6 +295,12 @@ def conferma_prenotazione(request, slug):
         ora_fine=ora_fine,
         campo_id=campo
     )
+    Partita.objects.create(
+        risultato='',
+        giocatori='',
+        prenotazione_id=Prenotazione.objects.latest('id').id,
+        cliente_id=request.user.id
+    )
     return render(request, 'website/conferma_prenotazione.html', {
         'slug': slug,
         'impianto': impianto

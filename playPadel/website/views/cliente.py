@@ -19,6 +19,7 @@ def dashboardCliente(request):
     user = request.user
     prenotazione = Prenotazione.objects.filter(cliente_id=user.pk)
     partita_list = Partita.objects.filter(cliente_id=user.pk)
+    today = datetime.now().date()
     dati_partita = []
     for p in partita_list:
         id = p.id
@@ -28,15 +29,16 @@ def dashboardCliente(request):
         risultato = p.risultato.split(', ')
         nome_impianto = p.prenotazione.impianto.nome
         num_campo = p.prenotazione.campo.numero
-        dati_partita.append({
-            'id': id,
-            'data': data,
-            'ora': ora,
-            'giocatori': lista_giocatori,
-            'risultato': risultato,
-            'nome_impianto': nome_impianto,
-            'num_campo': num_campo
-        })
+        if p.prenotazione.data <= today:
+            dati_partita.append({
+                'id': id,
+                'data': data,
+                'ora': ora,
+                'giocatori': lista_giocatori,
+                'risultato': risultato,
+                'nome_impianto': nome_impianto,
+                'num_campo': num_campo
+            })
 
     partita_form = {partita.pk: PartitaForm(instance=partita) for partita in partita_list}
 

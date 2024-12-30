@@ -110,3 +110,6 @@ playPadel/static/img/media
 !playPadel/static/img/media/default_impianto_photo.jpg
 playPadel/static/img/profile_pics
 !playPadel/static/img/profile_pics/default_profile_pic.png
+
+# tests folder
+tests
